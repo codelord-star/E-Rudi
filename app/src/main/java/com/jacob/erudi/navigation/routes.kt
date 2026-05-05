@@ -1,0 +1,15 @@
+package com.jacob.erudi.navigation
+
+const val ROUTE_SPLASH = "splashscreen"
+const val ROUTE_HOME = "home"
+const val ROUTE_REGISTER = "register"
+const val ROUTE_LOGIN = "login"
+const val ROUTE_ADMINDASHBOARD = "admindashboard"
+const val ROUTE_USERDASHBOARD = "userdashboard"
+const val ROUTE_PROFILE="profilescreen"
+const val ROUTE_REPORTLOSTITEM = "reportlostitem"
+const val ROUTE_REPORTFOUNDITEM = "reportfounditem"
+const val ROUTE_FOUNDITEMS = "founditems"
+const val ROUTE_LOSTITEMS = "lostitems"
+const val ROUTE_MYREPORTS = "myreports"
+const val ROUTE_CLAIMED = "claimed"
