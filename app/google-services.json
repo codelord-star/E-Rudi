@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "621387979870",
+    "project_id": "erudi-45114",
+    "storage_bucket": "erudi-45114.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621387979870:android:68d2d8e22eae27a8e3a8cf",
+        "android_client_info": {
+          "package_name": "com.jacob.erudi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2jFYqjheHnDtvrB3qWzREBUzreWttx5Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
