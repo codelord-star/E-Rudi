@@ -1,4 +1,4 @@
-package com.jacob.erudi.screens.services
+package com.jacob.erudi.screens.report
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -50,7 +50,7 @@ import com.jacob.erudi.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReportLostItem(navController: NavHostController){
+fun ReportFoundItem(navController: NavHostController){
     Scaffold(
         topBar = {
             TopAppBar(
@@ -78,7 +78,7 @@ fun ReportLostItem(navController: NavHostController){
             )
         }
     ) {
-        innerpadding->
+            innerpadding->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -105,14 +105,14 @@ fun ReportLostItem(navController: NavHostController){
             var category by remember { mutableStateOf("") }
             var description by remember { mutableStateOf("") }
             var location by remember { mutableStateOf("") }
-            var dateLost by remember { mutableStateOf("") }
+            var dateFound by remember { mutableStateOf("") }
 
             var expanded by remember { mutableStateOf(false) }
 
             val categories = listOf("Electronics", "Clothing", "Documents", "Accessories", "Others")
 
             Text(
-                text = "REPORT LOST ITEM",
+                text = "REPORT FOUND ITEM",
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp
             )
@@ -171,9 +171,9 @@ fun ReportLostItem(navController: NavHostController){
             )
 
             OutlinedTextField(
-                value = dateLost,
-                onValueChange = { dateLost = it },
-                label = { Text("Date Lost") },
+                value = dateFound,
+                onValueChange = { dateFound = it },
+                label = { Text("Date Found") },
                 placeholder = { Text("DD/MM/YYYY") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -216,6 +216,6 @@ fun ReportLostItem(navController: NavHostController){
 
 @Preview(showBackground = true)
 @Composable
-fun ReportLostItemPreview(){
-    ReportLostItem(rememberNavController())
+fun ReportFoundItemPreview(){
+    ReportFoundItem(rememberNavController())
 }

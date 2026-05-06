@@ -1,9 +1,6 @@
 package com.jacob.erudi.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
-import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,8 +11,8 @@ import com.jacob.erudi.screens.home.HomeScreen
 import com.jacob.erudi.screens.login.LoginScreen
 import com.jacob.erudi.screens.profile.ProfileScreen
 import com.jacob.erudi.screens.register.RegisterScreen
-import com.jacob.erudi.screens.services.ReportFoundItem
-import com.jacob.erudi.screens.services.ReportLostItem
+import com.jacob.erudi.screens.report.ReportFoundItem
+import com.jacob.erudi.screens.report.ReportLostItem
 import com.jacob.erudi.screens.splash.SplashScreen
 
 @Composable
