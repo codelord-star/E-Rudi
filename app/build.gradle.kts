@@ -62,5 +62,8 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     //navigation
     implementation("androidx.navigation:navigation-compose:2.9.8")
-    //firebase
+    //imagepicker
+    implementation("androidx.activity:activity-compose:1.13.0")
+    //COIL
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }
