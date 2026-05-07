@@ -43,14 +43,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.jacob.erudi.R
+import com.jacob.erudi.data.ItemViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportLostItem(navController: NavHostController){
+    val viewModel: ItemViewModel = viewModel()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -79,6 +82,29 @@ fun ReportLostItem(navController: NavHostController){
         }
     ) {
         innerpadding->
+        //for image upload
+        val context = LocalContext.current
+
+        var selectedImageUri by remember {
+            mutableStateOf<Uri?>(null)
+        }
+
+        val launcher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.GetContent()
+        ) { uri: Uri? ->
+            selectedImageUri = uri
+        }
+
+        var itemName by remember { mutableStateOf("") }
+        var category by remember { mutableStateOf("") }
+        var description by remember { mutableStateOf("") }
+        var location by remember { mutableStateOf("") }
+        var dateLost by remember { mutableStateOf("") }
+
+        var expanded by remember { mutableStateOf(false) }
+
+        val categories = listOf("Electronics", "Clothing", "Documents", "Accessories", "Others")
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -88,28 +114,6 @@ fun ReportLostItem(navController: NavHostController){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            //for image upload
-            val context = LocalContext.current
-
-            var selectedImageUri by remember {
-                mutableStateOf<Uri?>(null)
-            }
-
-            val launcher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.GetContent()
-            ) { uri: Uri? ->
-                selectedImageUri = uri
-            }
-
-            var itemName by remember { mutableStateOf("") }
-            var category by remember { mutableStateOf("") }
-            var description by remember { mutableStateOf("") }
-            var location by remember { mutableStateOf("") }
-            var dateLost by remember { mutableStateOf("") }
-
-            var expanded by remember { mutableStateOf(false) }
-
-            val categories = listOf("Electronics", "Clothing", "Documents", "Accessories", "Others")
 
             Text(
                 text = "REPORT LOST ITEM",
@@ -204,7 +208,26 @@ fun ReportLostItem(navController: NavHostController){
             // 🔹 Submit Button
             Button(
                 onClick = {
-                    // We'll handle submission later
+                    viewModel.uploadLostItem(
+
+                        itemName = itemName,
+
+                        category = category,
+
+                        description = description,
+
+                        location = location,
+
+                        dateLost = dateLost,
+
+                        imageUri = selectedImageUri,
+
+                        fullName = "Jacob Hagee",
+
+                        email = "jacob@gmail.com",
+
+                        phone = "0712345678"
+                    )
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

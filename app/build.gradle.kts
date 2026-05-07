@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
@@ -66,4 +67,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.13.0")
     //COIL
     implementation("io.coil-kt:coil-compose:2.5.0")
+    //firebase image storage
+    implementation("com.google.firebase:firebase-storage-ktx:21.0.2")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
 }
