@@ -68,6 +68,17 @@ dependencies {
     //COIL
     implementation("io.coil-kt:coil-compose:2.5.0")
     //firebase image storage
+    implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
     implementation("com.google.firebase:firebase-storage-ktx:21.0.2")
     implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
+    // Retrofit core library
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    // Example: Gson Converter
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    //okhttp3
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    //cloudinary dependency
+    implementation("com.cloudinary:cloudinary-android:2.3.1")
+    //icons
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
 }

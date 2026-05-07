@@ -88,19 +88,6 @@ fun ReportFoundItem(navController: NavHostController){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            //for image upload
-            val context = LocalContext.current
-
-            var selectedImageUri by remember {
-                mutableStateOf<Uri?>(null)
-            }
-
-            val launcher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.GetContent()
-            ) { uri: Uri? ->
-                selectedImageUri = uri
-            }
-
             var itemName by remember { mutableStateOf("") }
             var category by remember { mutableStateOf("") }
             var description by remember { mutableStateOf("") }
@@ -181,22 +168,11 @@ fun ReportFoundItem(navController: NavHostController){
             // 🔹 Image Placeholder
             Button(
                 onClick = {
-                    // TODO: Open image picker
-                    launcher.launch("image/*")
+
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Upload Image")
-            }
-            //show selected image preview
-            selectedImageUri?.let { uri ->
-                Image(
-                    painter = rememberAsyncImagePainter(uri),
-                    contentDescription = "Selected Image",
-                    modifier = Modifier
-                        .size(150.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                )
             }
 
             Spacer(modifier = Modifier.height(20.dp))

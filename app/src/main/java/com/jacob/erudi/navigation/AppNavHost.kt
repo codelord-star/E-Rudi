@@ -5,35 +5,35 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.jacob.erudi.screens.login.Login
 import com.jacob.erudi.screens.dashboard.AdminDashboard
 import com.jacob.erudi.screens.dashboard.UserDashboard
-import com.jacob.erudi.screens.home.HomeScreen
-import com.jacob.erudi.screens.login.LoginScreen
-import com.jacob.erudi.screens.profile.ProfileScreen
-import com.jacob.erudi.screens.register.RegisterScreen
+import com.jacob.erudi.screens.home.Home
+import com.jacob.erudi.screens.profile.Profile
+import com.jacob.erudi.screens.register.Register
 import com.jacob.erudi.screens.report.ReportFoundItem
 import com.jacob.erudi.screens.report.ReportLostItem
-import com.jacob.erudi.screens.splash.SplashScreen
+import com.jacob.erudi.screens.splash.Splash
 
 @Composable
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),
-    startDestination: String=ROUTE_SPLASH
+    startDestination: String="splash"
 ){
     NavHost(navController=navController,
         startDestination=startDestination
     ){
-        composable (ROUTE_SPLASH){
-            SplashScreen(navController)
+        composable ("splash"){
+            Splash(navController)
         }
         composable (ROUTE_HOME){
-            HomeScreen(navController)
+            Home(navController)
         }
         composable (ROUTE_REGISTER){
-            RegisterScreen(navController)
+            Register(navController)
         }
         composable (ROUTE_LOGIN){
-            LoginScreen(navController)
+            Login(navController)
         }
         composable (ROUTE_ADMINDASHBOARD){
             AdminDashboard(navController)
@@ -42,7 +42,7 @@ fun AppNavHost(
             UserDashboard(navController)
         }
         composable (ROUTE_PROFILE){
-            ProfileScreen(navController)
+            Profile(navController)
         }
         composable (ROUTE_REPORTLOSTITEM){
             ReportLostItem(navController)

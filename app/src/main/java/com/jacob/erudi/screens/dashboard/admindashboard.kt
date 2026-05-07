@@ -12,11 +12,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -35,6 +43,7 @@ import com.jacob.erudi.R
 import com.jacob.erudi.navigation.ROUTE_CLAIMED
 import com.jacob.erudi.navigation.ROUTE_FOUNDITEMS
 import com.jacob.erudi.navigation.ROUTE_LOSTITEMS
+import com.jacob.erudi.navigation.ROUTE_PROFILE
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,15 +56,15 @@ fun AdminDashboard(navController: NavHostController){
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.icon1),
-                            contentDescription = "App Logo",
+                            Icons.Default.Search,
+                            contentDescription = "search icon",
                             modifier = Modifier.size(24.dp)
                         )
 
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = "E-Rudi"
+                            text = "eRudi"
                         )
                     }
                 },
@@ -64,12 +73,12 @@ fun AdminDashboard(navController: NavHostController){
                     titleContentColor = Color.White
                 ),
                 actions = {
-//                    IconButton(onClick = {}) {
-//                        Icon(
-//                            Icons.Default.ExitToApp,
-//                            contentDescription = "sign out"
-//                        )
-//                    }
+                    IconButton(onClick = {}) {
+                        Icon(
+                            Icons.Default.ExitToApp,
+                            contentDescription = "sign out"
+                        )
+                    }
                 }
             )
         },
@@ -83,22 +92,22 @@ fun AdminDashboard(navController: NavHostController){
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-//                    NavigationBarItem(
-//                        selected = true,
-//                        onClick = {navController.navigate(ROUTE_ADMINDASHBOARD)},
-//                        icon = { Icon(Icons.Default.Home,
-//                            contentDescription = "home icon") },
-//                        label = { Text("HOME",
-//                            color = Color.White) }
-//                    )
-//                    NavigationBarItem(
-//                        selected = false,
-//                        onClick = {navController.navigate(ROUTE_PROFILE)},
-//                        icon = { Icon(Icons.Default.Person,
-//                            contentDescription = "person icon") },
-//                        label = { Text("PROFILE ",
-//                            color = Color.White) }
-//                    )
+                    NavigationBarItem(
+                        selected = true,
+                        onClick = {},
+                        icon = { Icon(Icons.Default.Home,
+                            contentDescription = "home icon") },
+                        label = { Text("HOME",
+                            color = Color.White) }
+                    )
+                    NavigationBarItem(
+                        selected = false,
+                        onClick = {navController.navigate(ROUTE_PROFILE)},
+                        icon = { Icon(Icons.Default.Person,
+                            contentDescription = "person icon") },
+                        label = { Text("PROFILE ",
+                            color = Color.White) }
+                    )
                 }
             }
         }

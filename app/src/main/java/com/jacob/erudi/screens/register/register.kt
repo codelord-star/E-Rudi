@@ -12,6 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -45,7 +51,7 @@ import com.jacob.erudi.navigation.ROUTE_LOGIN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(navController: NavHostController){
+fun Register(navController: NavHostController){
     Scaffold(
         topBar = {
             TopAppBar(
@@ -54,15 +60,15 @@ fun RegisterScreen(navController: NavHostController){
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.icon1),
-                            contentDescription = "App Logo",
+                            Icons.Default.Search,
+                            contentDescription = "search icon",
                             modifier = Modifier.size(24.dp)
                         )
 
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = "E-Rudi"
+                            text = "eRudi"
                         )
                     }
                 },
@@ -106,12 +112,12 @@ fun RegisterScreen(navController: NavHostController){
                 value = fullname,
                 onValueChange = { fullname = it },
                 label = { Text("Fullname") },
-//                leadingIcon = {
-//                    Icon(
-//                        imageVector = Icons.Default.Person,
-//                        contentDescription = "person icon",
-//                    )
-//                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "person icon",
+                    )
+                },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -119,12 +125,12 @@ fun RegisterScreen(navController: NavHostController){
                 value = email,
                 onValueChange={email=it},
                 label={Text("Email address")},
-//                leadingIcon = {
-//                    Icon(
-//                        imageVector = Icons.Default.Email,
-//                        contentDescription = "Email icon",
-//                    )
-//                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Email,
+                        contentDescription = "Email icon",
+                    )
+                },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -132,12 +138,12 @@ fun RegisterScreen(navController: NavHostController){
                 value = phone,
                 onValueChange={phone=it},
                 label={Text("Phone Number")},
-//                leadingIcon = {
-//                    Icon(
-//                        imageVector = Icons.Default.Email,
-//                        contentDescription = "Email icon",
-//                    )
-//                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Phone,
+                        contentDescription = "Email icon",
+                    )
+                },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -145,12 +151,12 @@ fun RegisterScreen(navController: NavHostController){
                 value = password,
                 onValueChange={password=it},
                 label={Text("Password")},
-//                leadingIcon = {
-//                    Icon(
-//                        imageVector = Icons.Default.Lock,
-//                        contentDescription = "lock icon",
-//                    )
-//                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = "lock icon",
+                    )
+                },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = PasswordVisualTransformation(),
@@ -159,12 +165,12 @@ fun RegisterScreen(navController: NavHostController){
                 value = confirmPass,
                 onValueChange={confirmPass=it},
                 label={Text("Confirm password")},
-//                leadingIcon = {
-//                    Icon(
-//                        imageVector = Icons.Default.Lock,
-//                        contentDescription = "lock icon",
-//                    )
-//                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = "lock icon",
+                    )
+                },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = PasswordVisualTransformation(),
@@ -207,5 +213,5 @@ fun RegisterScreen(navController: NavHostController){
 @Preview
 @Composable
 fun RegisterPreview(){
-    RegisterScreen(rememberNavController())
+    Register(rememberNavController())
 }

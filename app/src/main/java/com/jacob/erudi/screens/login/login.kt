@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -49,7 +53,7 @@ import com.jacob.erudi.navigation.ROUTE_USERDASHBOARD
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavHostController){
+fun Login(navController: NavHostController){
     Scaffold(
         topBar = {
             TopAppBar(
@@ -58,15 +62,15 @@ fun LoginScreen(navController: NavHostController){
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.icon1),
-                            contentDescription = "App Logo",
+                            Icons.Default.Search,
+                            contentDescription = "search icon",
                             modifier = Modifier.size(24.dp)
                         )
 
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = "E-Rudi"
+                            text = "eRudi"
                         )
                     }
                 },
@@ -107,12 +111,12 @@ fun LoginScreen(navController: NavHostController){
                 value = email,
                 onValueChange = {email = it},
                 label = {Text("Email address")},
-//                leadingIcon = {
-//                    Icon(
-//                        imageVector = Icons.Default.Email,
-//                        contentDescription = "email icon"
-//                    )
-//                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Email,
+                        contentDescription = "email icon"
+                    )
+                },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -121,12 +125,12 @@ fun LoginScreen(navController: NavHostController){
                 value = password,
                 onValueChange ={ password=it },
                 label={Text("Password")},
-//                leadingIcon = {
-//                    Icon(
-//                        imageVector = Icons.Default.Lock,
-//                        contentDescription = "password icon",
-//                    )
-//                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = "password icon",
+                    )
+                },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = PasswordVisualTransformation(),
@@ -172,5 +176,5 @@ fun LoginScreen(navController: NavHostController){
 @Preview(showBackground = true)
 @Composable
 fun LoginPreview(){
-    LoginScreen(rememberNavController())
+    Login(rememberNavController())
 }

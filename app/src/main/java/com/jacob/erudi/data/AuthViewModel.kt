@@ -3,7 +3,8 @@ package com.jacob.erudi.data
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.jacob.erudi.models.User
+import com.jacob.erudi.models.AppUser
+import kotlin.jvm.java
 
 class AuthViewModel : ViewModel() {
 
@@ -49,7 +50,7 @@ class AuthViewModel : ViewModel() {
                     }
 
                     // 🔹 Create user object (NO PASSWORD STORED)
-                    val user = User(
+                    val user = AppUser(
                         fullname = fullname,
                         email = email,
                         phone = phone,
@@ -122,4 +123,54 @@ class AuthViewModel : ViewModel() {
             }
     }
 
+    fun signout(){
+        mAuth.signOut()
+    }
+
+    fun getCurrentUserName(onResult: (String) -> Unit) {
+
+        val uid = mAuth.currentUser?.uid
+
+        if (uid == null) {
+            onResult("User")
+            return
+        }
+
+        FirebaseDatabase.getInstance()
+            .getReference("Users/$uid")
+            .get()
+            .addOnSuccessListener { snapshot ->
+
+                val fullname =
+                    snapshot.child("fullname").value?.toString() ?: "User"
+
+                onResult(fullname)
+            }
+            .addOnFailureListener {
+                onResult("User")
+            }
+    }
+
+    fun getUserData(onResult: (AppUser?) -> Unit) {
+
+        val uid = mAuth.currentUser?.uid
+
+        if (uid == null) {
+            onResult(null)
+            return
+        }
+
+        FirebaseDatabase.getInstance()
+            .getReference("Users/$uid")
+            .get()
+            .addOnSuccessListener { snapshot ->
+
+                val user = snapshot.getValue(AppUser::class.java)
+
+                onResult(user)
+            }
+            .addOnFailureListener {
+                onResult(null)
+            }
+    }
 }

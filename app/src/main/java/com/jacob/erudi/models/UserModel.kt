@@ -1,6 +1,6 @@
 package com.jacob.erudi.models
 
-data class User(
+data class AppUser(
     val fullname: String = "",
     val email: String = "",
     val phone: String = "",

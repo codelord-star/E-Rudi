@@ -1,6 +1,7 @@
 package com.jacob.erudi.screens.report
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -53,7 +54,6 @@ import com.jacob.erudi.data.ItemViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportLostItem(navController: NavHostController){
-    val viewModel: ItemViewModel = viewModel()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -84,6 +84,7 @@ fun ReportLostItem(navController: NavHostController){
         innerpadding->
         //for image upload
         val context = LocalContext.current
+        val viewModel: ItemViewModel = viewModel()
 
         var selectedImageUri by remember {
             mutableStateOf<Uri?>(null)
@@ -209,24 +210,13 @@ fun ReportLostItem(navController: NavHostController){
             Button(
                 onClick = {
                     viewModel.uploadLostItem(
-
-                        itemName = itemName,
-
-                        category = category,
-
-                        description = description,
-
-                        location = location,
-
-                        dateLost = dateLost,
-
-                        imageUri = selectedImageUri,
-
-                        fullName = "Jacob Hagee",
-
-                        email = "jacob@gmail.com",
-
-                        phone = "0712345678"
+                        itemName,
+                        category,
+                        description,
+                        location,
+                        dateLost,
+                        selectedImageUri,
+                        context   // 👈 ADD THIS LAST PARAM
                     )
                 },
                 modifier = Modifier.fillMaxWidth()

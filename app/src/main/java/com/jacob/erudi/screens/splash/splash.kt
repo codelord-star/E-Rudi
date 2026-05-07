@@ -27,7 +27,7 @@ import com.jacob.erudi.navigation.ROUTE_HOME
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavHostController){
+fun Splash(navController: NavHostController){
     LaunchedEffect(true) {
         delay(2000)
         navController.navigate(ROUTE_HOME)
@@ -65,5 +65,5 @@ fun SplashScreen(navController: NavHostController){
 @Preview(showBackground = true)
 @Composable
 fun SplashScreenPreview(){
-    SplashScreen(rememberNavController())
+    Splash(rememberNavController())
 }

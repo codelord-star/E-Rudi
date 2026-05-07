@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -39,7 +41,7 @@ import com.jacob.erudi.navigation.ROUTE_REGISTER
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController){
+fun Home(navController: NavHostController){
     Scaffold(
         topBar = {
             TopAppBar(
@@ -48,15 +50,15 @@ fun HomeScreen(navController: NavHostController){
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.icon1),
-                            contentDescription = "App Logo",
+                            Icons.Default.Search,
+                            contentDescription = "search icon",
                             modifier = Modifier.size(24.dp)
                         )
 
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = "E-Rudi"
+                            text = "eRudi"
                         )
                     }
                 },
@@ -125,5 +127,5 @@ fun HomeScreen(navController: NavHostController){
 @Preview(showBackground = true)
 @Composable
 fun HomePreview(){
-    HomeScreen(rememberNavController())
+    Home(rememberNavController())
 }
