@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -51,8 +52,9 @@ import com.jacob.erudi.R
 import com.jacob.erudi.data.AuthViewModel
 import com.jacob.erudi.navigation.ROUTE_FOUNDITEMS
 import com.jacob.erudi.navigation.ROUTE_LOGIN
-import com.jacob.erudi.navigation.ROUTE_FOUNDITEMS
-import com.jacob.erudi.navigation.ROUTE_MYREPORTS
+import com.jacob.erudi.navigation.ROUTE_MYCLAIMS
+import com.jacob.erudi.navigation.ROUTE_MYFOUNDITEMS
+import com.jacob.erudi.navigation.ROUTE_MYLOSTITEMS
 import com.jacob.erudi.navigation.ROUTE_PROFILE
 import com.jacob.erudi.navigation.ROUTE_REPORTFOUNDITEM
 import com.jacob.erudi.navigation.ROUTE_REPORTLOSTITEM
@@ -152,84 +154,152 @@ fun UserDashboard(navController: NavHostController){
             }
             Text(text = "Welcome, $fullname")
 
-            Card(modifier = Modifier
-                .width(200.dp)
-                .padding(16.dp)
-                .height(150.dp)
-                .clickable{navController.navigate(ROUTE_REPORTLOSTITEM)},
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(8.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.Gray,
-                    contentColor = Color.Black,
-                )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Card(
+                    modifier = Modifier
+                        .width(170.dp)
+                        .padding(16.dp)
+                        .height(150.dp)
+                        .clickable { navController.navigate(ROUTE_REPORTLOSTITEM) },
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Gray,
+                        contentColor = Color.Black,
+                    )
                 ) {
-                    Text("REPORT LOST ITEM",
-                        fontWeight = FontWeight.Bold)
-                    Text("Report an item you have lost")
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            "REPORT LOST ITEM",
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text("Report an item you have lost")
+                    }
+                }
+                Card(
+                    modifier = Modifier
+                        .width(170.dp)
+                        .padding(16.dp)
+                        .height(150.dp)
+                        .clickable { navController.navigate(ROUTE_REPORTFOUNDITEM) },
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Gray,
+                        contentColor = Color.Black,
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            "REPORT FOUND ITEM",
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text("Report an item you have found misplaced")
+                    }
                 }
             }
-            Card(modifier = Modifier
-                .width(200.dp)
-                .padding(16.dp)
-                .height(150.dp)
-                .clickable{navController.navigate(ROUTE_REPORTFOUNDITEM)},
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(8.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.Gray,
-                    contentColor = Color.Black,
-                )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Card(modifier = Modifier
+                    .width(170.dp)
+                    .padding(16.dp)
+                    .height(150.dp)
+                    .clickable{navController.navigate(ROUTE_FOUNDITEMS)},
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Gray,
+                        contentColor = Color.Black,
+                    )
                 ) {
-                    Text("REPORT FOUND ITEM",
-                        fontWeight = FontWeight.Bold)
-                    Text("Report an item you have found misplaced")
+                    Column(modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text("FOUND ITEMS",
+                            fontWeight = FontWeight.Bold)
+                        Text("View a list of items that have been found")
+                    }
+                }
+                Card(modifier = Modifier
+                    .width(170.dp)
+                    .padding(16.dp)
+                    .height(150.dp)
+                    .clickable{navController.navigate(ROUTE_MYCLAIMS)},
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Gray,
+                        contentColor = Color.Black,
+                    )
+                ) {
+                    Column(modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text("MY CLAIMS",
+                            fontWeight = FontWeight.Bold)
+                        Text("View a list of items that you reported lost")
+                    }
                 }
             }
-            Card(modifier = Modifier
-                .width(200.dp)
-                .padding(16.dp)
-                .height(150.dp)
-                .clickable{navController.navigate(ROUTE_FOUNDITEMS)},
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(8.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.DarkGray,
-                    contentColor = Color.Black,
-                )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Card(modifier = Modifier
+                    .width(170.dp)
+                    .padding(16.dp)
+                    .height(150.dp)
+                    .clickable{navController.navigate(ROUTE_MYLOSTITEMS)},
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Gray,
+                        contentColor = Color.Black,
+                    )
                 ) {
-                    Text("FOUND ITEMS",
-                        fontWeight = FontWeight.Bold)
-                    Text("View a list of items that have been found")
+                    Column(modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text("MY LOST ITEMS",
+                            fontWeight = FontWeight.Bold)
+                        Text("View a list of items that have been found")
+                    }
                 }
-            }
-            Card(modifier = Modifier
-                .width(200.dp)
-                .padding(16.dp)
-                .height(150.dp)
-                .clickable{navController.navigate(ROUTE_MYREPORTS)},
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(8.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.DarkGray,
-                    contentColor = Color.Black,
-                )
-            ) {
-                Column(modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Card(modifier = Modifier
+                    .width(170.dp)
+                    .padding(16.dp)
+                    .height(150.dp)
+                    .clickable{navController.navigate(ROUTE_MYFOUNDITEMS)},
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Gray,
+                        contentColor = Color.Black,
+                    )
                 ) {
-                    Text("MY REPORTS",
-                        fontWeight = FontWeight.Bold)
-                    Text("View a list of items that you reported lost")
+                    Column(modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text("MY FOUND ITEMS",
+                            fontWeight = FontWeight.Bold)
+                        Text("View a list of items that you reported lost")
+                    }
                 }
             }
         }

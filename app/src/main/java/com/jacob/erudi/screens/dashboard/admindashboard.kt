@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -54,6 +55,7 @@ import com.jacob.erudi.navigation.ROUTE_CLAIMED
 import com.jacob.erudi.navigation.ROUTE_FOUNDITEMS
 import com.jacob.erudi.navigation.ROUTE_LOSTITEMS
 import com.jacob.erudi.navigation.ROUTE_PROFILE
+import com.jacob.erudi.navigation.ROUTE_RETURNED
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -147,48 +149,60 @@ fun AdminDashboard(navController: NavHostController){
                 .padding(innerpadding),
 
             ) {
-            Card(modifier = Modifier
-                .width(200.dp)
-                .padding(16.dp)
-                .height(150.dp)
-                .clickable{navController.navigate(ROUTE_LOSTITEMS)},
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(8.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.Red,
-                    contentColor = Color.Black,
-                )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Card(modifier = Modifier
+                    .width(170.dp)
+                    .padding(16.dp)
+                    .height(150.dp)
+                    .clickable{navController.navigate(ROUTE_LOSTITEMS)},
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Red,
+                        contentColor = Color.Black,
+                    )
                 ) {
-                    Text("LOST ITEMS",
-                        fontWeight = FontWeight.Bold)
-                    Text("View the list of items reported as lost")
+                    Column(modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text("LOST ITEMS",
+                            fontWeight = FontWeight.Bold)
+                        Text("View the list of items reported as lost")
+                    }
+                }
+                Card(modifier = Modifier
+                    .width(170.dp)
+                    .padding(16.dp)
+                    .height(150.dp)
+                    .clickable{navController.navigate(ROUTE_FOUNDITEMS)},
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Green,
+                        contentColor = Color.Black,
+                    )
+                ) {
+                    Column(modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text("FOUND ITEMS",
+                            fontWeight = FontWeight.Bold)
+                        Text("View the list of items found misplaced but have been recovered")
+                    }
                 }
             }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) { }
             Card(modifier = Modifier
-                .width(200.dp)
-                .padding(16.dp)
-                .height(150.dp)
-                .clickable{navController.navigate(ROUTE_FOUNDITEMS)},
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(8.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.Green,
-                    contentColor = Color.Black,
-                )
-            ) {
-                Column(modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text("FOUND ITEMS",
-                        fontWeight = FontWeight.Bold)
-                    Text("View the list of items found misplaced but have been recovered")
-                }
-            }
-            Card(modifier = Modifier
-                .width(200.dp)
+                .width(170.dp)
                 .padding(16.dp)
                 .height(150.dp)
                 .clickable{navController.navigate(ROUTE_CLAIMED)},
@@ -205,6 +219,26 @@ fun AdminDashboard(navController: NavHostController){
                     Text("CLAIMED ITEMS",
                         fontWeight = FontWeight.Bold)
                     Text("View the list of items that have been claimed")
+                }
+            }
+            Card(modifier = Modifier
+                .width(170.dp)
+                .padding(16.dp)
+                .height(150.dp)
+                .clickable{navController.navigate(ROUTE_RETURNED)},
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.Gray,
+                    contentColor = Color.Black,
+                )
+            ) {
+                Column(modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text("RETURNED ITEMS",
+                        fontWeight = FontWeight.Bold)
+                    Text("View the list of items that have been returned to their owners")
                 }
             }
         }

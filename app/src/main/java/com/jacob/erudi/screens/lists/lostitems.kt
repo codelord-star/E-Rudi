@@ -127,7 +127,7 @@ fun LostItemCard(item: LostItem){
 
             Text(text = "Item Name: ${item.itemName}")
             Text(text = "Category: ${item.category}")
-            Text(text = "Location: ${item.location}")
+            Text(text = "Location Lost: ${item.location}")
             Text(text = "Date Lost: ${item.dateLost}")
             Text(text = "Description: ${item.description}")
             Text(text = "Contact: ${item.email}")

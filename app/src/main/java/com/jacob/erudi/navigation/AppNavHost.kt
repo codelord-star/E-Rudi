@@ -9,8 +9,11 @@ import com.jacob.erudi.screens.login.Login
 import com.jacob.erudi.screens.dashboard.AdminDashboard
 import com.jacob.erudi.screens.dashboard.UserDashboard
 import com.jacob.erudi.screens.home.Home
+import com.jacob.erudi.screens.lists.ClaimedItems
 import com.jacob.erudi.screens.lists.FoundItemsList
 import com.jacob.erudi.screens.lists.LostItemsList
+import com.jacob.erudi.screens.lists.MyClaimedItems
+import com.jacob.erudi.screens.lists.ReturnedItems
 import com.jacob.erudi.screens.myreports.MyFoundItems
 import com.jacob.erudi.screens.myreports.MyLostItems
 import com.jacob.erudi.screens.profile.Profile
@@ -60,9 +63,6 @@ fun AppNavHost(
         composable(ROUTE_FOUNDITEMS) {
             FoundItemsList(navController)
         }
-        composable(ROUTE_MYREPORTS) {
-
-        }
         composable(ROUTE_MYLOSTITEMS) {
             MyLostItems(navController)
         }
@@ -70,7 +70,13 @@ fun AppNavHost(
             MyFoundItems(navController)
         }
         composable(ROUTE_CLAIMED) {
-
+            ClaimedItems(navController)
+        }
+        composable(ROUTE_MYCLAIMS) {
+            MyClaimedItems(navController)
+        }
+        composable(ROUTE_RETURNED) {
+            ReturnedItems(navController)
         }
     }
 }

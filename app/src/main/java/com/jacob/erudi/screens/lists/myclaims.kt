@@ -6,12 +6,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun ClaimedItems(navController : NavHostController){
+fun MyClaimedItems(navController : NavHostController){
 
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun ClaimedPreview(){
-    ClaimedItems(rememberNavController())
+fun MyClaimedPreview(){
+    MyClaimedItems(rememberNavController())
 }
