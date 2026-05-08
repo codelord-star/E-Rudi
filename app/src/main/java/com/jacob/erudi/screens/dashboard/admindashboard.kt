@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -162,7 +163,7 @@ fun AdminDashboard(navController: NavHostController){
                     shape = RoundedCornerShape(16.dp),
                     elevation = CardDefaults.cardElevation(8.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.Red,
+                        containerColor = Color.Gray,
                         contentColor = Color.Black,
                     )
                 ) {
@@ -171,7 +172,8 @@ fun AdminDashboard(navController: NavHostController){
                     ) {
                         Text("LOST ITEMS",
                             fontWeight = FontWeight.Bold)
-                        Text("View the list of items reported as lost")
+                        Text("View the list of items reported as lost",
+                            fontFamily = FontFamily.SansSerif)
                     }
                 }
                 Card(modifier = Modifier
@@ -182,7 +184,7 @@ fun AdminDashboard(navController: NavHostController){
                     shape = RoundedCornerShape(16.dp),
                     elevation = CardDefaults.cardElevation(8.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.Green,
+                        containerColor = Color.Gray,
                         contentColor = Color.Black,
                     )
                 ) {
@@ -191,7 +193,8 @@ fun AdminDashboard(navController: NavHostController){
                     ) {
                         Text("FOUND ITEMS",
                             fontWeight = FontWeight.Bold)
-                        Text("View the list of items found misplaced but have been recovered")
+                        Text("View the list of items found misplaced and reported",
+                            fontFamily = FontFamily.SansSerif)
                     }
                 }
             }
@@ -200,45 +203,48 @@ fun AdminDashboard(navController: NavHostController){
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
-            ) { }
-            Card(modifier = Modifier
-                .width(170.dp)
-                .padding(16.dp)
-                .height(150.dp)
-                .clickable{navController.navigate(ROUTE_CLAIMED)},
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(8.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.Yellow,
-                    contentColor = Color.Black,
-                )
             ) {
-                Column(modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Card(modifier = Modifier
+                    .width(170.dp)
+                    .padding(16.dp)
+                    .height(150.dp)
+                    .clickable{navController.navigate(ROUTE_CLAIMED)},
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Gray,
+                        contentColor = Color.Black,
+                    )
                 ) {
-                    Text("CLAIMED ITEMS",
-                        fontWeight = FontWeight.Bold)
-                    Text("View the list of items that have been claimed")
+                    Column(modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text("CLAIMED ITEMS",
+                            fontWeight = FontWeight.Bold)
+                        Text("View the list of items that have been claimed",
+                            fontFamily = FontFamily.SansSerif)
+                    }
                 }
-            }
-            Card(modifier = Modifier
-                .width(170.dp)
-                .padding(16.dp)
-                .height(150.dp)
-                .clickable{navController.navigate(ROUTE_RETURNED)},
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(8.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.Gray,
-                    contentColor = Color.Black,
-                )
-            ) {
-                Column(modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Card(modifier = Modifier
+                    .width(170.dp)
+                    .padding(16.dp)
+                    .height(150.dp)
+                    .clickable{navController.navigate(ROUTE_RETURNED)},
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.Gray,
+                        contentColor = Color.Black,
+                    )
                 ) {
-                    Text("RETURNED ITEMS",
-                        fontWeight = FontWeight.Bold)
-                    Text("View the list of items that have been returned to their owners")
+                    Column(modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text("RETURNED ITEMS",
+                            fontWeight = FontWeight.Bold)
+                        Text("View the list of items that have been returned to their owners",
+                            fontFamily = FontFamily.SansSerif)
+                    }
                 }
             }
         }

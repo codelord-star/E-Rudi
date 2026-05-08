@@ -83,7 +83,9 @@ fun LostItemsList(navController: NavHostController){
                 .get()
                 .addOnSuccessListener { result ->
                     val items = result.documents.mapNotNull { document ->
-                        document.toObject(LostItem::class.java)
+                        val item = document.toObject(LostItem::class.java)
+
+                        item?.copy(id = document.id)
                     }
                     lostItems = items
                 }

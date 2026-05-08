@@ -83,7 +83,9 @@ fun FoundItemsList(navController: NavHostController){
                 .get()
                 .addOnSuccessListener { result ->
                     val items = result.documents.mapNotNull { document ->
-                        document.toObject(FoundItem::class.java)
+                        val item = document.toObject(FoundItem::class.java)
+
+                        item?.copy(id = document.id)
                     }
                     foundItems = items
                 }
@@ -134,33 +136,12 @@ fun FoundItemCard(item: FoundItem) {
             Text(text = "Description: ${item.description}")
             Text(text = "Contact: ${item.email}")
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Button(
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Green
-                )
-            ) {
-                Text("Update")
-            }
-            Button(
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Cyan
-                )
-            ) { }
-            Button(
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Red
-                )
-            ) {
-                Text("Delete")
-            }
+        Button(onClick = {},
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Green,
+                contentColor = Color.White
+            )) {
+            Text("Claim")
         }
     }
 }

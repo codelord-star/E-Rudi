@@ -42,6 +42,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -161,7 +163,7 @@ fun UserDashboard(navController: NavHostController){
             ) {
                 Card(
                     modifier = Modifier
-                        .width(170.dp)
+                        .width(180.dp)
                         .padding(16.dp)
                         .height(150.dp)
                         .clickable { navController.navigate(ROUTE_REPORTLOSTITEM) },
@@ -185,7 +187,7 @@ fun UserDashboard(navController: NavHostController){
                 }
                 Card(
                     modifier = Modifier
-                        .width(170.dp)
+                        .width(180.dp)
                         .padding(16.dp)
                         .height(150.dp)
                         .clickable { navController.navigate(ROUTE_REPORTFOUNDITEM) },
@@ -204,7 +206,8 @@ fun UserDashboard(navController: NavHostController){
                             "REPORT FOUND ITEM",
                             fontWeight = FontWeight.Bold
                         )
-                        Text("Report an item you have found misplaced")
+                        Text("Report an item you have found misplaced",
+                            fontFamily = FontFamily.SansSerif)
                     }
                 }
             }
@@ -215,7 +218,7 @@ fun UserDashboard(navController: NavHostController){
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Card(modifier = Modifier
-                    .width(170.dp)
+                    .width(180.dp)
                     .padding(16.dp)
                     .height(150.dp)
                     .clickable{navController.navigate(ROUTE_FOUNDITEMS)},
@@ -231,11 +234,12 @@ fun UserDashboard(navController: NavHostController){
                     ) {
                         Text("FOUND ITEMS",
                             fontWeight = FontWeight.Bold)
-                        Text("View a list of items that have been found")
+                        Text("View a list of items that have been found",
+                            fontFamily = FontFamily.SansSerif)
                     }
                 }
                 Card(modifier = Modifier
-                    .width(170.dp)
+                    .width(180.dp)
                     .padding(16.dp)
                     .height(150.dp)
                     .clickable{navController.navigate(ROUTE_MYCLAIMS)},
@@ -251,7 +255,8 @@ fun UserDashboard(navController: NavHostController){
                     ) {
                         Text("MY CLAIMS",
                             fontWeight = FontWeight.Bold)
-                        Text("View a list of items that you reported lost")
+                        Text("View a list of items that you have claimed",
+                            fontFamily = FontFamily.SansSerif)
                     }
                 }
             }
@@ -262,7 +267,7 @@ fun UserDashboard(navController: NavHostController){
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Card(modifier = Modifier
-                    .width(170.dp)
+                    .width(180.dp)
                     .padding(16.dp)
                     .height(150.dp)
                     .clickable{navController.navigate(ROUTE_MYLOSTITEMS)},
@@ -278,11 +283,12 @@ fun UserDashboard(navController: NavHostController){
                     ) {
                         Text("MY LOST ITEMS",
                             fontWeight = FontWeight.Bold)
-                        Text("View a list of items that have been found")
+                        Text("View a list of items that you reported lost",
+                            fontFamily = FontFamily.SansSerif)
                     }
                 }
                 Card(modifier = Modifier
-                    .width(170.dp)
+                    .width(180.dp)
                     .padding(16.dp)
                     .height(150.dp)
                     .clickable{navController.navigate(ROUTE_MYFOUNDITEMS)},
@@ -298,7 +304,8 @@ fun UserDashboard(navController: NavHostController){
                     ) {
                         Text("MY FOUND ITEMS",
                             fontWeight = FontWeight.Bold)
-                        Text("View a list of items that you reported lost")
+                        Text("View a list of items that you found misplaced and reported",
+                            fontFamily = FontFamily.SansSerif)
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package com.jacob.erudi.screens.myreports
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -61,7 +64,7 @@ fun MyLostItems(navController : NavHostController){
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        Text("LIST OF LOST ITEMS")
+                        Text("MY LOST ITEMS")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -89,7 +92,9 @@ fun MyLostItems(navController : NavHostController){
                 .addOnSuccessListener { result ->
 
                     val items = result.documents.mapNotNull { document ->
-                        document.toObject(LostItem::class.java)
+                        val item = document.toObject(LostItem::class.java)
+
+                        item?.copy(id = document.id)
                     }
 
                     myLostItems = items
@@ -103,14 +108,25 @@ fun MyLostItems(navController : NavHostController){
         ) {
 
             items(myLostItems) { item ->
-                LostItemCard(item)
+                LostItemCard(
+                    item=item,
+                    onUpdateClick = {selectedItem ->
+
+                        navController.navigate(
+                            "edit_lost_item/${selectedItem.id}"
+                        )
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun LostItemCard(item: LostItem) {
+fun LostItemCard(
+    item: LostItem,
+    onUpdateClick: (LostItem) -> Unit
+) {
 
     Card(
         modifier = Modifier
@@ -149,6 +165,30 @@ fun LostItemCard(item: LostItem) {
             Text(text = "Description: ${ item.description }")
 
             Text(text = "Contact: ${item.email}")
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Button(
+                    onClick = {onUpdateClick(item)},
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Green,
+                        contentColor = Color.White
+                    )) {
+                    Text("Update")
+                }
+                Button(onClick = {},
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red,
+                        contentColor = Color.White
+                    )) {
+                    Text("Delete")
+                }
+            }
         }
     }
 }
