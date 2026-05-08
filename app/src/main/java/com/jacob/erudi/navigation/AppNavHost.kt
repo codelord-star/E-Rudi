@@ -9,6 +9,8 @@ import com.jacob.erudi.screens.login.Login
 import com.jacob.erudi.screens.dashboard.AdminDashboard
 import com.jacob.erudi.screens.dashboard.UserDashboard
 import com.jacob.erudi.screens.home.Home
+import com.jacob.erudi.screens.lists.FoundItemsList
+import com.jacob.erudi.screens.lists.LostItemsList
 import com.jacob.erudi.screens.profile.Profile
 import com.jacob.erudi.screens.register.Register
 import com.jacob.erudi.screens.report.ReportFoundItem
@@ -51,10 +53,10 @@ fun AppNavHost(
             ReportFoundItem(navController)
         }
         composable(ROUTE_LOSTITEMS) {
-
+            LostItemsList(navController)
         }
         composable(ROUTE_FOUNDITEMS) {
-
+            FoundItemsList(navController)
         }
         composable(ROUTE_MYREPORTS) {
 

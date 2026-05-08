@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,10 +45,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.jacob.erudi.R
+import com.jacob.erudi.data.ItemViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,8 +63,8 @@ fun ReportFoundItem(navController: NavHostController){
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.icon1),
-                            contentDescription = "App Logo",
+                            Icons.Default.Search,
+                            contentDescription = "search icon",
                             modifier = Modifier.size(24.dp)
                         )
 
@@ -79,6 +83,29 @@ fun ReportFoundItem(navController: NavHostController){
         }
     ) {
             innerpadding->
+        //for image upload
+        val context = LocalContext.current
+        val viewModel: ItemViewModel = viewModel()
+
+        var selectedImageUri by remember {
+            mutableStateOf<Uri?>(null)
+        }
+
+        val launcher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.GetContent()
+        ) { uri: Uri? ->
+            selectedImageUri = uri
+        }
+
+        var itemName by remember { mutableStateOf("") }
+        var category by remember { mutableStateOf("") }
+        var description by remember { mutableStateOf("") }
+        var foundLocation by remember { mutableStateOf("") }
+        var dateFound by remember { mutableStateOf("") }
+
+        var expanded by remember { mutableStateOf(false) }
+
+        val categories = listOf("Electronics", "Clothing", "Documents", "Accessories", "Others")
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -88,16 +115,6 @@ fun ReportFoundItem(navController: NavHostController){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            var itemName by remember { mutableStateOf("") }
-            var category by remember { mutableStateOf("") }
-            var description by remember { mutableStateOf("") }
-            var location by remember { mutableStateOf("") }
-            var dateFound by remember { mutableStateOf("") }
-
-            var expanded by remember { mutableStateOf(false) }
-
-            val categories = listOf("Electronics", "Clothing", "Documents", "Accessories", "Others")
-
             Text(
                 text = "REPORT FOUND ITEM",
                 fontWeight = FontWeight.Bold,
@@ -151,8 +168,8 @@ fun ReportFoundItem(navController: NavHostController){
             )
 
             OutlinedTextField(
-                value = location,
-                onValueChange = { location = it },
+                value = foundLocation,
+                onValueChange = { foundLocation = it },
                 label = { Text("Location Lost") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -168,11 +185,22 @@ fun ReportFoundItem(navController: NavHostController){
             // 🔹 Image Placeholder
             Button(
                 onClick = {
-
+                    // TODO: Open image picker
+                    launcher.launch("image/*")
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Upload Image")
+            }
+            //show selected image preview
+            selectedImageUri?.let { uri ->
+                Image(
+                    painter = rememberAsyncImagePainter(uri),
+                    contentDescription = "Selected Image",
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                )
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -180,7 +208,15 @@ fun ReportFoundItem(navController: NavHostController){
             // 🔹 Submit Button
             Button(
                 onClick = {
-                    // We'll handle submission later
+                    viewModel.uploadFoundItem(
+                        itemName,
+                        category,
+                        description,
+                        foundLocation,
+                        dateFound,
+                        selectedImageUri,
+                        context   // 👈 ADD THIS LAST PARAM
+                    )
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
