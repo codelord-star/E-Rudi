@@ -2,6 +2,7 @@ package com.jacob.erudi.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,9 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -78,22 +82,20 @@ fun Home(navController: NavHostController){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.icon1),
-                contentDescription = "app logo",
-                modifier = Modifier
-                    .size(250.dp)
-                    .clip(CircleShape)
+            Icon(
+                Icons.Default.Search,
+                contentDescription = "search icon",
+                modifier = Modifier.size(250.dp)
             )
             Text(
-                text = "E-Rudi",
+                text = "eRudi",
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = "Ripoti...Irudi kwa mwenyewe",
                 fontFamily = FontFamily.Serif,
-            )
+                )
             Spacer(modifier = Modifier.height(20.dp))
             Row(
                 modifier = Modifier
@@ -118,8 +120,13 @@ fun Home(navController: NavHostController){
             Spacer(modifier = Modifier.height(20.dp))
             //ABOUT
             Text(
-                text = "",
-            )
+                text = "- eRudi helps you quickly report and recover lost or found items within your community.",
+                fontSize = 18.sp
+                )
+            Text("- Easily post lost items or items you’ve found and connect with the rightful owners.",
+                fontSize = 18.sp)
+            Text("- Powered by real-time listings and secure user details to make item recovery fast and reliable.",
+                fontSize = 18.sp)
         }
     }
 }

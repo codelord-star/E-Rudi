@@ -1,5 +1,6 @@
 package com.jacob.erudi.screens.lists
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,14 +33,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jacob.erudi.models.FoundItem
-import com.jacob.erudi.models.LostItem
+import kotlin.jvm.java
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,9 +62,7 @@ fun FoundItemsList(navController: NavHostController){
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        Text(
-                            text = "eRudi"
-                        )
+                        Text("LIST OF FOUND ITEMS")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -124,12 +127,40 @@ fun FoundItemCard(item: FoundItem) {
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            Text(text = item.itemName)
-            Text(text = item.category)
+            Text(text = "Item name: ${item.itemName}")
+            Text(text = "Category: ${item.category}")
             Text(text = "Found at: ${item.foundLocation}")
             Text(text = "Date: ${item.dateFound}")
             Text(text = "Description: ${item.description}")
             Text(text = "Contact: ${item.email}")
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Green
+                )
+            ) {
+                Text("Update")
+            }
+            Button(
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Cyan
+                )
+            ) { }
+            Button(
+                onClick = {},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Red
+                )
+            ) {
+                Text("Delete")
+            }
         }
     }
 }

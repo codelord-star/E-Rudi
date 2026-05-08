@@ -11,6 +11,8 @@ import com.jacob.erudi.screens.dashboard.UserDashboard
 import com.jacob.erudi.screens.home.Home
 import com.jacob.erudi.screens.lists.FoundItemsList
 import com.jacob.erudi.screens.lists.LostItemsList
+import com.jacob.erudi.screens.myreports.MyFoundItems
+import com.jacob.erudi.screens.myreports.MyLostItems
 import com.jacob.erudi.screens.profile.Profile
 import com.jacob.erudi.screens.register.Register
 import com.jacob.erudi.screens.report.ReportFoundItem
@@ -20,7 +22,7 @@ import com.jacob.erudi.screens.splash.Splash
 @Composable
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),
-    startDestination: String="splash"
+    startDestination: String=ROUTE_HOME
 ){
     NavHost(navController=navController,
         startDestination=startDestination
@@ -60,6 +62,12 @@ fun AppNavHost(
         }
         composable(ROUTE_MYREPORTS) {
 
+        }
+        composable(ROUTE_MYLOSTITEMS) {
+            MyLostItems(navController)
+        }
+        composable(ROUTE_MYFOUNDITEMS) {
+            MyFoundItems(navController)
         }
         composable(ROUTE_CLAIMED) {
 

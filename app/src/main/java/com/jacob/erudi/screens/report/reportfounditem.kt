@@ -170,7 +170,7 @@ fun ReportFoundItem(navController: NavHostController){
             OutlinedTextField(
                 value = foundLocation,
                 onValueChange = { foundLocation = it },
-                label = { Text("Location Lost") },
+                label = { Text("Location Found") },
                 modifier = Modifier.fillMaxWidth()
             )
 

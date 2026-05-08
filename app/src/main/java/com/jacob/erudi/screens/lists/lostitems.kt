@@ -1,5 +1,6 @@
 package com.jacob.erudi.screens.lists
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,11 +36,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jacob.erudi.models.LostItem
+import com.jacob.erudi.screens.lists.LostItemsList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,9 +62,7 @@ fun LostItemsList(navController: NavHostController){
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        Text(
-                            text = "eRudi"
-                        )
+                        Text("LIST OF LOST ITEMS")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -122,8 +125,8 @@ fun LostItemCard(item: LostItem){
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            Text(text = item.itemName)
-            Text(text = item.category)
+            Text(text = "Item Name: ${item.itemName}")
+            Text(text = "Category: ${item.category}")
             Text(text = "Location: ${item.location}")
             Text(text = "Date Lost: ${item.dateLost}")
             Text(text = "Description: ${item.description}")
@@ -132,7 +135,7 @@ fun LostItemCard(item: LostItem){
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun LostItemsPreview(){
     LostItemsList(rememberNavController())

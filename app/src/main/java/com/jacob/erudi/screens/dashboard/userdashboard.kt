@@ -51,7 +51,7 @@ import com.jacob.erudi.R
 import com.jacob.erudi.data.AuthViewModel
 import com.jacob.erudi.navigation.ROUTE_FOUNDITEMS
 import com.jacob.erudi.navigation.ROUTE_LOGIN
-import com.jacob.erudi.navigation.ROUTE_LOSTITEMS
+import com.jacob.erudi.navigation.ROUTE_FOUNDITEMS
 import com.jacob.erudi.navigation.ROUTE_MYREPORTS
 import com.jacob.erudi.navigation.ROUTE_PROFILE
 import com.jacob.erudi.navigation.ROUTE_REPORTFOUNDITEM
@@ -79,7 +79,7 @@ fun UserDashboard(navController: NavHostController){
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = "eRudi"
+                            text = "USER DASHBOARD"
                         )
                     }
                 },
@@ -196,7 +196,7 @@ fun UserDashboard(navController: NavHostController){
                 .width(200.dp)
                 .padding(16.dp)
                 .height(150.dp)
-                .clickable{navController.navigate(ROUTE_LOSTITEMS)},
+                .clickable{navController.navigate(ROUTE_FOUNDITEMS)},
                 shape = RoundedCornerShape(16.dp),
                 elevation = CardDefaults.cardElevation(8.dp),
                 colors = CardDefaults.cardColors(

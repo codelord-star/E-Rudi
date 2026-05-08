@@ -68,7 +68,7 @@ fun Register(navController: NavHostController){
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = "eRudi"
+                            text = "SIGN UP"
                         )
                     }
                 },
@@ -92,12 +92,7 @@ fun Register(navController: NavHostController){
                 painter = painterResource(id = R.drawable.profile2),
                 contentDescription = "profile logo",
                 modifier = Modifier
-                    .size(270.dp)
-            )
-            Text(
-                text = "SIGN UP",
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
+                    .size(250.dp)
             )
             val context = LocalContext.current
             val viewModel: AuthViewModel = viewModel()

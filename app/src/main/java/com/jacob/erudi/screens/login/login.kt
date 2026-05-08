@@ -70,7 +70,7 @@ fun Login(navController: NavHostController){
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = "eRudi"
+                            text = "SIGN IN"
                         )
                     }
                 },
@@ -95,11 +95,6 @@ fun Login(navController: NavHostController){
                 contentDescription = "Profile holder",
                 modifier = Modifier
                     .size(300.dp)
-            )
-            Text(
-                text = "SIGN IN",
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
             )
             val viewModel: AuthViewModel = viewModel()
             val context = LocalContext.current
