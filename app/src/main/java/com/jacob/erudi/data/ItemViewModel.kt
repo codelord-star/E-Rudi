@@ -110,7 +110,7 @@ class ItemViewModel : ViewModel() {
     // -----------------------------
     // CLOUDINARY UPLOAD FUNCTION
     // -----------------------------
-    private fun uploadImageToCloudinary(
+    fun uploadImageToCloudinary(
         context: Context,
         imageUri: Uri,
         onSuccess: (String) -> Unit,

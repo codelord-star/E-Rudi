@@ -14,11 +14,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -81,6 +83,8 @@ fun MyFoundItems(navController : NavHostController){
         var myFoundItems by remember {
             mutableStateOf<List<FoundItem>>(emptyList())
         }
+        var showDeleteDialog by remember { mutableStateOf(false) }
+        var itemToDelete by remember { mutableStateOf<FoundItem?>(null) }
 
         LaunchedEffect(Unit) {
 
@@ -105,14 +109,79 @@ fun MyFoundItems(navController : NavHostController){
         ) {
 
             items(myFoundItems) { item ->
-                FoundItemCard(item)
+                FoundItemCard(
+                    item=item,
+                    onUpdateClick = { selectedItem ->
+                        navController.navigate(
+                            "edit_found_item/${selectedItem.id}"
+                        )
+                    },
+                    onDeleteClick = { selectedItem ->
+
+                        itemToDelete = selectedItem
+                        showDeleteDialog = true
+                    }
+                )
             }
+        }
+        if (showDeleteDialog && itemToDelete != null) {
+
+            AlertDialog(
+                onDismissRequest = {
+                    showDeleteDialog = false
+                    itemToDelete = null
+                },
+                title = {
+                    Text("Delete Item")
+                },
+                text = {
+                    Text("Are you sure you want to delete this item? This action cannot be undone.")
+                },
+                confirmButton = {
+
+                    Button(
+                        onClick = {
+
+                            FirebaseFirestore.getInstance()
+                                .collection("lost_items")
+                                .document(itemToDelete!!.id)
+                                .delete()
+                                .addOnSuccessListener {
+
+                                    myFoundItems = myFoundItems.filter {
+                                        it.id != itemToDelete!!.id
+                                    }
+
+                                    showDeleteDialog = false
+                                    itemToDelete = null
+                                }
+                        }
+                    ) {
+                        Text("Delete")
+                    }
+                },
+                dismissButton = {
+
+                    OutlinedButton(
+                        onClick = {
+                            showDeleteDialog = false
+                            itemToDelete = null
+                        }
+                    ) {
+                        Text("Cancel")
+                    }
+                }
+            )
         }
     }
 }
 
 @Composable
-fun FoundItemCard(item: FoundItem) {
+fun FoundItemCard(
+    item: FoundItem,
+    onUpdateClick: (FoundItem) -> Unit,
+    onDeleteClick: (FoundItem) -> Unit
+) {
 
     Card(
         modifier = Modifier
@@ -159,14 +228,14 @@ fun FoundItemCard(item: FoundItem) {
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = {},
+                Button(onClick = {onUpdateClick(item)},
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Green,
                         contentColor = Color.White
                     )) {
                     Text("Update")
                 }
-                Button(onClick = {},
+                Button(onClick = {onDeleteClick(item)},
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Red,
                         contentColor = Color.White

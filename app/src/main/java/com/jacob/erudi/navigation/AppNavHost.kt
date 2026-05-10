@@ -14,6 +14,8 @@ import com.jacob.erudi.screens.lists.FoundItemsList
 import com.jacob.erudi.screens.lists.LostItemsList
 import com.jacob.erudi.screens.lists.MyClaimedItems
 import com.jacob.erudi.screens.lists.ReturnedItems
+import com.jacob.erudi.screens.myreports.EditFoundItemScreen
+import com.jacob.erudi.screens.myreports.EditLostItemScreen
 import com.jacob.erudi.screens.myreports.MyFoundItems
 import com.jacob.erudi.screens.myreports.MyLostItems
 import com.jacob.erudi.screens.profile.Profile
@@ -77,6 +79,28 @@ fun AppNavHost(
         }
         composable(ROUTE_RETURNED) {
             ReturnedItems(navController)
+        }
+        composable(
+            route = "edit_lost_item/{itemId}"
+        ) { backStackEntry ->
+            val itemId = backStackEntry.arguments
+                ?.getString("itemId") ?: ""
+
+            EditLostItemScreen(
+                navController = navController,
+                itemId = itemId
+            )
+        }
+        composable(
+            route = "edit_found_item/{itemId}"
+        ) { backStackEntry ->
+
+            val itemId = backStackEntry.arguments?.getString("itemId") ?: ""
+
+            EditFoundItemScreen(
+                navController = navController,
+                itemId = itemId
+            )
         }
     }
 }

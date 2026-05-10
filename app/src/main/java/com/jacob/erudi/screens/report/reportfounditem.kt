@@ -71,7 +71,7 @@ fun ReportFoundItem(navController: NavHostController){
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = "E-Rudi"
+                            text = "REPORT FOUND ITEM"
                         )
                     }
                 },

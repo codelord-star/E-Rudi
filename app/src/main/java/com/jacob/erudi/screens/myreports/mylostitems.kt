@@ -1,5 +1,6 @@
 package com.jacob.erudi.screens.myreports
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,11 +15,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -83,6 +86,8 @@ fun MyLostItems(navController : NavHostController){
         var myLostItems by remember {
             mutableStateOf<List<LostItem>>(emptyList())
         }
+        var showDeleteDialog by remember { mutableStateOf(false) }
+        var itemToDelete by remember { mutableStateOf<LostItem?>(null) }
 
         LaunchedEffect(Unit) {
 
@@ -111,13 +116,66 @@ fun MyLostItems(navController : NavHostController){
                 LostItemCard(
                     item=item,
                     onUpdateClick = {selectedItem ->
-
                         navController.navigate(
                             "edit_lost_item/${selectedItem.id}"
                         )
+                    },
+                    onDeleteClick = { selectedItem ->
+
+                        itemToDelete = selectedItem
+                        showDeleteDialog = true
                     }
                 )
             }
+        }
+        if (showDeleteDialog && itemToDelete != null) {
+
+            AlertDialog(
+                onDismissRequest = {
+                    showDeleteDialog = false
+                    itemToDelete = null
+                },
+                title = {
+                    Text("Delete Item")
+                },
+                text = {
+                    Text("Are you sure you want to delete this item? This action cannot be undone.")
+                },
+                confirmButton = {
+
+                    Button(
+                        onClick = {
+
+                            FirebaseFirestore.getInstance()
+                                .collection("lost_items")
+                                .document(itemToDelete!!.id)
+                                .delete()
+                                .addOnSuccessListener {
+
+                                    myLostItems = myLostItems.filter {
+                                        it.id != itemToDelete!!.id
+                                    }
+
+                                    showDeleteDialog = false
+                                    itemToDelete = null
+                                }
+                        }
+                    ) {
+                        Text("Delete")
+                    }
+                },
+                dismissButton = {
+
+                    OutlinedButton(
+                        onClick = {
+                            showDeleteDialog = false
+                            itemToDelete = null
+                        }
+                    ) {
+                        Text("Cancel")
+                    }
+                }
+            )
         }
     }
 }
@@ -125,7 +183,8 @@ fun MyLostItems(navController : NavHostController){
 @Composable
 fun LostItemCard(
     item: LostItem,
-    onUpdateClick: (LostItem) -> Unit
+    onUpdateClick: (LostItem) -> Unit,
+    onDeleteClick: (LostItem) -> Unit
 ) {
 
     Card(
@@ -181,7 +240,9 @@ fun LostItemCard(
                     )) {
                     Text("Update")
                 }
-                Button(onClick = {},
+                Button(onClick = {
+                    onDeleteClick(item)
+                },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Red,
                         contentColor = Color.White
