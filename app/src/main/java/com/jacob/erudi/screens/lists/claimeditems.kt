@@ -138,6 +138,7 @@ fun ClaimedItemCard(item: ClaimedItem) {
             Text(text = "Found at: ${item.locationFound}")
             Text(text = "Date: ${item.dateFound}")
             Text(text = item.description)
+            Text(text = "Original finder: ${item.originalOwnerEmail}")
 
             Spacer(modifier = Modifier.height(8.dp))
 

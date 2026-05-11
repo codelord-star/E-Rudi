@@ -1,5 +1,6 @@
 package com.jacob.erudi.screens.lists
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,8 +41,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jacob.erudi.models.FoundItem
+import com.jacob.erudi.navigation.ROUTE_MYCLAIMS
 import kotlin.jvm.java
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,13 +100,57 @@ fun FoundItemsList(navController: NavHostController){
                 .padding(16.dp)
         ) {
             items(foundItems) { item ->
-                FoundItemCard(item)
+                FoundItemCard(
+                    item=item,
+                    onClaimClick = { selectedItem ->
+
+                        val currentUser =
+                            FirebaseAuth.getInstance().currentUser
+
+                        val claimerEmail = currentUser?.email ?: ""
+
+                        val claimedItem = hashMapOf(
+
+                            "itemName" to selectedItem.itemName,
+                            "category" to selectedItem.category,
+                            "description" to selectedItem.description,
+                            "locationFound" to selectedItem.foundLocation,
+                            "dateFound" to selectedItem.dateFound,
+                            "imageUrl" to selectedItem.imageUrl,
+
+                            // original finder
+                            "originalOwnerEmail" to selectedItem.email,
+
+                            // person claiming
+                            "claimerEmail" to claimerEmail
+                        )
+
+                        FirebaseFirestore.getInstance()
+                            .collection("claimed_items")
+                            .add(claimedItem)
+                            .addOnSuccessListener {
+
+                                Toast.makeText(
+                                    navController.context,
+                                    "Claim has been made",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                navController.navigate(
+                                    ROUTE_MYCLAIMS
+                                )
+                            }
+                    }
+                )
             }
         }
     }
 }
 @Composable
-fun FoundItemCard(item: FoundItem) {
+fun FoundItemCard(
+    item: FoundItem,
+    onClaimClick: (FoundItem) -> Unit
+    ) {
 
     Card(
         modifier = Modifier
@@ -136,7 +183,7 @@ fun FoundItemCard(item: FoundItem) {
             Text(text = "Description: ${item.description}")
             Text(text = "Contact: ${item.email}")
         }
-        Button(onClick = {},
+        Button(onClick = {onClaimClick(item)},
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Green,
                 contentColor = Color.White
