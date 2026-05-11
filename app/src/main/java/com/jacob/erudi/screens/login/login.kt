@@ -3,37 +3,21 @@ package com.jacob.erudi.screens.login
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -51,117 +35,149 @@ import com.jacob.erudi.navigation.ROUTE_LOGIN
 import com.jacob.erudi.navigation.ROUTE_REGISTER
 import com.jacob.erudi.navigation.ROUTE_USERDASHBOARD
 
+// Consistently using the theme colors
+val AppDeepBlue = Color(0xFF1A237E)
+val AppGradient = Brush.verticalGradient(
+    colors = listOf(Color(0xFF1A237E), Color(0xFF3949AB), Color(0xFF5C6BC0))
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Login(navController: NavHostController){
+fun Login(navController: NavHostController) {
+    val viewModel: AuthViewModel = viewModel()
+    val context = LocalContext.current
+
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Default.Search,
-                            contentDescription = "search icon",
-                            modifier = Modifier.size(24.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        Text(
-                            text = "SIGN IN"
-                        )
-                    }
-                },
+                title = { Text("WELCOME BACK", fontWeight = FontWeight.Bold, fontSize = 18.sp) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Blue,
+                    containerColor = AppDeepBlue,
                     titleContentColor = Color.White
-                ),
+                )
             )
         }
-    ) {
-        innerpadding->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
-                .padding(innerpadding),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+                .background(brush = AppGradient)
+                .padding(innerPadding)
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.profile2),
-                contentDescription = "Profile holder",
-                modifier = Modifier
-                    .size(300.dp)
-            )
-            val viewModel: AuthViewModel = viewModel()
-            val context = LocalContext.current
-
-            var email by remember { mutableStateOf("") }
-            var password by remember { mutableStateOf("") }
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = {email = it},
-                label = {Text("Email address")},
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Email,
-                        contentDescription = "email icon"
-                    )
-                },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            OutlinedTextField(
-                value = password,
-                onValueChange ={ password=it },
-                label={Text("Password")},
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "password icon",
-                    )
-                },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                visualTransformation = PasswordVisualTransformation(),
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            Button(
-                onClick = {
-                    viewModel.signin(
-                        email,
-                        password,
-                        onSuccessAdmin = {
-                            navController.navigate(ROUTE_ADMINDASHBOARD) {
-                                popUpTo(ROUTE_LOGIN) { inclusive = true }
-                            }
-                        },
-                        onSuccessUser = {
-                            navController.navigate(ROUTE_USERDASHBOARD) {
-                                popUpTo(ROUTE_LOGIN) { inclusive = true }
-                            }
-                        },
-                        onError = { message ->
-                            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-                        }
-                    )
-                },
+            // Refined Header Image
+            Surface(
+                modifier = Modifier.size(160.dp),
+                shape = CircleShape,
+                color = Color.White.copy(alpha = 0.15f)
             ) {
-                Text(
-                    text = "Sign In",
-                    fontSize = 18.sp
+                Image(
+                    painter = painterResource(id = R.drawable.profile2),
+                    contentDescription = "Profile Logo",
+                    modifier = Modifier.padding(20.dp).clip(CircleShape),
+                    contentScale = ContentScale.Crop
                 )
             }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Login Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.96f)),
+                shape = RoundedCornerShape(28.dp),
+                elevation = CardDefaults.cardElevation(10.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(
+                        text = "Login to your account",
+                        color = AppDeepBlue,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+
+                    // Email Field
+                    OutlinedTextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        label = { Text("Email Address") },
+                        leadingIcon = { Icon(Icons.Default.Email, contentDescription = null, tint = AppDeepBlue) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(14.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = AppDeepBlue,
+                            unfocusedBorderColor = Color.Gray.copy(alpha = 0.4f)
+                        )
+                    )
+
+                    // Password Field
+                    OutlinedTextField(
+                        value = password,
+                        onValueChange = { password = it },
+                        label = { Text("Password") },
+                        leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = AppDeepBlue) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(14.dp),
+                        visualTransformation = PasswordVisualTransformation(),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = AppDeepBlue,
+                            unfocusedBorderColor = Color.Gray.copy(alpha = 0.4f)
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Sign In Button
+                    Button(
+                        onClick = {
+                            viewModel.signin(
+                                email,
+                                password,
+                                onSuccessAdmin = {
+                                    navController.navigate(ROUTE_ADMINDASHBOARD) {
+                                        popUpTo(ROUTE_LOGIN) { inclusive = true }
+                                    }
+                                },
+                                onSuccessUser = {
+                                    navController.navigate(ROUTE_USERDASHBOARD) {
+                                        popUpTo(ROUTE_LOGIN) { inclusive = true }
+                                    }
+                                },
+                                onError = { message ->
+                                    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                                }
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth().height(56.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = AppDeepBlue),
+                        shape = RoundedCornerShape(14.dp)
+                    ) {
+                        Text("SIGN IN", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
             TextButton(
-                onClick = {navController.navigate(ROUTE_REGISTER)}
+                onClick = { navController.navigate(ROUTE_REGISTER) }
             ) {
                 Text(
-                    text = "Don't have an account? Sign up"
+                    text = "Don't have an account? Sign Up",
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 15.sp
                 )
             }
         }
@@ -170,6 +186,6 @@ fun Login(navController: NavHostController){
 
 @Preview(showBackground = true)
 @Composable
-fun LoginPreview(){
+fun LoginPreview() {
     Login(rememberNavController())
 }

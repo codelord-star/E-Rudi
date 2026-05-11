@@ -3,317 +3,202 @@ package com.jacob.erudi.screens.dashboard
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.jacob.erudi.R
 import com.jacob.erudi.data.AuthViewModel
-import com.jacob.erudi.navigation.ROUTE_FOUNDITEMS
-import com.jacob.erudi.navigation.ROUTE_LOGIN
-import com.jacob.erudi.navigation.ROUTE_MYCLAIMS
-import com.jacob.erudi.navigation.ROUTE_MYFOUNDITEMS
-import com.jacob.erudi.navigation.ROUTE_MYLOSTITEMS
-import com.jacob.erudi.navigation.ROUTE_PROFILE
-import com.jacob.erudi.navigation.ROUTE_REPORTFOUNDITEM
-import com.jacob.erudi.navigation.ROUTE_REPORTLOSTITEM
-import com.jacob.erudi.navigation.ROUTE_USERDASHBOARD
+import com.jacob.erudi.navigation.*
+
+// Using consistent theme colors
+val AppDeepBlue = Color(0xFF1A237E)
+val AppMediumBlue = Color(0xFF3949AB)
+val AppGradient = Brush.verticalGradient(
+    colors = listOf(AppDeepBlue, AppMediumBlue)
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserDashboard(navController: NavHostController){
+fun UserDashboard(navController: NavHostController) {
     val context = LocalContext.current
     val viewModel: AuthViewModel = viewModel()
+    var fullname by remember { mutableStateOf("User") }
+
+    LaunchedEffect(Unit) {
+        viewModel.getCurrentUserName { fullname = it }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Default.Search,
-                            contentDescription = "search icon",
-                            modifier = Modifier.size(24.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        Text(
-                            text = "USER DASHBOARD"
-                        )
-                    }
-                },
+                title = { Text("eRudi Dashboard", fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Blue,
-                    titleContentColor = Color.White
+                    containerColor = AppDeepBlue,
+                    titleContentColor = Color.White,
+                    actionIconContentColor = Color.White
                 ),
-
                 actions = {
                     IconButton(onClick = {
                         viewModel.signout()
-                        Toast.makeText(context, "Logged out successfully", Toast.LENGTH_SHORT).show()
-                        navController.navigate(ROUTE_LOGIN){
-                            popUpTo(navController.graph.startDestinationId) {
-                                inclusive = true
-                            }
+                        Toast.makeText(context, "Logged out", Toast.LENGTH_SHORT).show()
+                        navController.navigate(ROUTE_LOGIN) {
+                            popUpTo(0) { inclusive = true }
                         }
                     }) {
-                        Icon(
-                            Icons.Default.ExitToApp,
-                            contentDescription = "sign out"
-                        )
+                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Sign Out")
                     }
                 }
             )
         },
-
         bottomBar = {
-            BottomAppBar(
-                containerColor = Color.Blue,
-                contentColor = Color.White,
+            NavigationBar(
+                containerColor = Color.White,
+                tonalElevation = 8.dp
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    NavigationBarItem(
-                        selected = true,
-                        onClick = {},
-                        icon = { Icon(
-                            Icons.Default.Home,
-                            contentDescription = "home icon") },
-                        label = { Text("HOME",
-                            color = Color.White) }
+                NavigationBarItem(
+                    selected = true,
+                    onClick = { },
+                    icon = { Icon(Icons.Default.Home, contentDescription = null) },
+                    label = { Text("Home") },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = AppDeepBlue,
+                        selectedTextColor = AppDeepBlue,
+                        indicatorColor = AppDeepBlue.copy(alpha = 0.1f)
                     )
-                    NavigationBarItem(
-                        selected = false,
-                        onClick = {navController.navigate(ROUTE_PROFILE)},
-                        icon = { Icon(Icons.Default.Person,
-                            contentDescription = "person icon") },
-                        label = { Text("PROFILE ",
-                            color = Color.White) }
-                    )
-                }
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { navController.navigate(ROUTE_PROFILE) },
+                    icon = { Icon(Icons.Default.Person, contentDescription = null) },
+                    label = { Text("Profile") }
+                )
             }
         }
-    ) {
-        innerpadding->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
-                .padding(innerpadding),
+                .background(Color(0xFFF8F9FA)) // Subtle light-grey background
+                .padding(innerPadding)
         ) {
-            var fullname by remember { mutableStateOf("") }
-            LaunchedEffect(Unit) {
-                viewModel.getCurrentUserName {
-                    fullname = it
-                }
-            }
-            Text(text = "Welcome, $fullname")
-
-            Row(
+            // Header Welcome Section
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .fillMaxWidth()
+                    .background(AppGradient)
+                    .padding(24.dp)
             ) {
-                Card(
-                    modifier = Modifier
-                        .width(180.dp)
-                        .padding(16.dp)
-                        .height(150.dp)
-                        .clickable { navController.navigate(ROUTE_REPORTLOSTITEM) },
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(8.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.Gray,
-                        contentColor = Color.Black,
+                Column {
+                    Text(
+                        text = "Welcome back,",
+                        color = Color.White.copy(alpha = 0.8f),
+                        fontSize = 16.sp
                     )
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Text(
-                            "REPORT LOST ITEM",
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text("Report an item you have lost")
-                    }
-                }
-                Card(
-                    modifier = Modifier
-                        .width(180.dp)
-                        .padding(16.dp)
-                        .height(150.dp)
-                        .clickable { navController.navigate(ROUTE_REPORTFOUNDITEM) },
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(8.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.Gray,
-                        contentColor = Color.Black,
+                    Text(
+                        text = fullname,
+                        color = Color.White,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.ExtraBold
                     )
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Text(
-                            "REPORT FOUND ITEM",
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text("Report an item you have found misplaced",
-                            fontFamily = FontFamily.SansSerif)
-                    }
                 }
             }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Card(modifier = Modifier
-                    .width(180.dp)
-                    .padding(16.dp)
-                    .height(150.dp)
-                    .clickable{navController.navigate(ROUTE_FOUNDITEMS)},
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(8.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.Gray,
-                        contentColor = Color.Black,
-                    )
-                ) {
-                    Column(modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Text("FOUND ITEMS",
-                            fontWeight = FontWeight.Bold)
-                        Text("View a list of items that have been found",
-                            fontFamily = FontFamily.SansSerif)
-                    }
-                }
-                Card(modifier = Modifier
-                    .width(180.dp)
-                    .padding(16.dp)
-                    .height(150.dp)
-                    .clickable{navController.navigate(ROUTE_MYCLAIMS)},
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(8.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.Gray,
-                        contentColor = Color.Black,
-                    )
-                ) {
-                    Column(modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Text("MY CLAIMS",
-                            fontWeight = FontWeight.Bold)
-                        Text("View a list of items that you have claimed",
-                            fontFamily = FontFamily.SansSerif)
-                    }
-                }
-            }
+            // Dashboard Grid
+            val menuItems = listOf(
+                DashboardItem("Report Lost", ROUTE_REPORTLOSTITEM, Icons.Default.Search, "Report items you've lost"),
+                DashboardItem("Report Found", ROUTE_REPORTFOUNDITEM, Icons.Default.AddCircle, "Report items you've found"),
+                DashboardItem("Found Items", ROUTE_FOUNDITEMS, Icons.AutoMirrored.Filled.List, "Browse found items"),
+                DashboardItem("My Claims", ROUTE_MYCLAIMS, Icons.Default.CheckCircle, "Track your claims"),
+                DashboardItem("My Lost", ROUTE_MYLOSTITEMS, Icons.Default.Info, "Items you reported lost"),
+                DashboardItem("My Found", ROUTE_MYFOUNDITEMS, Icons.Default.ThumbUp, "Items you recovered")
+            )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxSize()
             ) {
-                Card(modifier = Modifier
-                    .width(180.dp)
-                    .padding(16.dp)
-                    .height(150.dp)
-                    .clickable{navController.navigate(ROUTE_MYLOSTITEMS)},
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(8.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.Gray,
-                        contentColor = Color.Black,
-                    )
-                ) {
-                    Column(modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Text("MY LOST ITEMS",
-                            fontWeight = FontWeight.Bold)
-                        Text("View a list of items that you reported lost",
-                            fontFamily = FontFamily.SansSerif)
-                    }
-                }
-                Card(modifier = Modifier
-                    .width(180.dp)
-                    .padding(16.dp)
-                    .height(150.dp)
-                    .clickable{navController.navigate(ROUTE_MYFOUNDITEMS)},
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(8.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.Gray,
-                        contentColor = Color.Black,
-                    )
-                ) {
-                    Column(modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Text("MY FOUND ITEMS",
-                            fontWeight = FontWeight.Bold)
-                        Text("View a list of items that you found misplaced and reported",
-                            fontFamily = FontFamily.SansSerif)
+                items(menuItems) { item ->
+                    DashboardCard(item) {
+                        navController.navigate(item.route)
                     }
                 }
             }
         }
     }
 }
+
+data class DashboardItem(val title: String, val route: String, val icon: ImageVector, val desc: String)
+
+@Composable
+fun DashboardCard(item: DashboardItem, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(160.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                imageVector = item.icon,
+                contentDescription = null,
+                tint = AppDeepBlue,
+                modifier = Modifier.size(32.dp)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = item.title,
+                fontWeight = FontWeight.Bold,
+                color = AppDeepBlue,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = item.desc,
+                fontSize = 11.sp,
+                color = Color.Gray,
+                textAlign = TextAlign.Center,
+                lineHeight = 14.sp
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
-fun UserDashboardPreview(){
+fun UserDashboardPreview() {
     UserDashboard(rememberNavController())
 }
