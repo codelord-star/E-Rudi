@@ -219,10 +219,9 @@ fun MyClaimedItemCard(
                     modifier = Modifier.height(8.dp)
                 )
             }
-
             Text(text = item.itemName)
 
-            Text(text = item.category)
+            Text(text = "Category: ${ item.category }")
 
             Text(
                 text = "Found at: ${item.locationFound}"
@@ -232,7 +231,11 @@ fun MyClaimedItemCard(
                 text = "Date Found: ${item.dateFound}"
             )
 
-            Text(text = item.description)
+            Text(text = "Decsription: ${ item.description }")
+
+            Text(
+                text = "Original finder: ${item.originalOwnerEmail}"
+            )
 
             Spacer(
                 modifier = Modifier.height(8.dp)
@@ -240,10 +243,6 @@ fun MyClaimedItemCard(
 
             Text(
                 text = "Claimed by: ${item.claimerEmail}"
-            )
-
-            Text(
-                text = "Original finder: ${item.originalOwnerEmail}"
             )
 
             Button(
