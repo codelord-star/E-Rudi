@@ -13,9 +13,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -38,6 +41,7 @@ import coil.compose.AsyncImage
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jacob.erudi.models.ClaimedItem
+import com.jacob.erudi.navigation.ROUTE_RETURNED
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,6 +80,13 @@ fun ClaimedItems(navController : NavHostController){
         var claimedItems by remember {
             mutableStateOf<List<ClaimedItem>>(emptyList())
         }
+        var showReturnDialog by remember {
+            mutableStateOf(false)
+        }
+
+        var itemToReturn by remember {
+            mutableStateOf<ClaimedItem?>(null)
+        }
 
         LaunchedEffect(Unit) {
 
@@ -102,14 +113,114 @@ fun ClaimedItems(navController : NavHostController){
         ) {
 
             items(claimedItems) { item ->
-                ClaimedItemCard(item)
+                ClaimedItemCard(
+                    item=item,
+                    onReturnClick = { selectedItem ->
+                        itemToReturn = selectedItem
+                        showReturnDialog = true
+                    }
+                )
             }
+        }
+        if (showReturnDialog && itemToReturn != null) {
+
+            AlertDialog(
+
+                onDismissRequest = {
+                    showReturnDialog = false
+                    itemToReturn = null
+                },
+
+                title = {
+                    Text("Confirm Return")
+                },
+
+                text = {
+                    Text(
+                        "Are you sure you want to mark this item as returned?"
+                    )
+                },
+
+                confirmButton = {
+
+                    Button(
+
+                        onClick = {
+
+                            val returnedItem = hashMapOf(
+
+                                "itemName" to itemToReturn!!.itemName,
+
+                                "category" to itemToReturn!!.category,
+
+                                "description" to itemToReturn!!.description,
+
+                                "locationFound" to itemToReturn!!.locationFound,
+
+                                "dateFound" to itemToReturn!!.dateFound,
+
+                                "imageUrl" to itemToReturn!!.imageUrl,
+
+                                "originalOwnerEmail" to
+                                        itemToReturn!!.originalOwnerEmail,
+
+                                "claimerEmail" to
+                                        itemToReturn!!.claimerEmail
+                            )
+
+                            FirebaseFirestore.getInstance()
+                                .collection("returned_items")
+                                .add(returnedItem)
+                                .addOnSuccessListener {
+
+                                    // DELETE from claimed_items
+                                    FirebaseFirestore.getInstance()
+                                        .collection("claimed_items")
+                                        .document(itemToReturn!!.id)
+                                        .delete()
+                                        .addOnSuccessListener {
+
+                                            claimedItems =
+                                                claimedItems.filter {
+
+                                                    it.id != itemToReturn!!.id
+                                                }
+
+                                            showReturnDialog = false
+                                            itemToReturn = null
+
+                                            navController.navigate(ROUTE_RETURNED)
+                                        }
+                                }
+                        }
+                    ) {
+                        Text("Confirm")
+                    }
+                },
+
+                dismissButton = {
+
+                    OutlinedButton(
+
+                        onClick = {
+
+                            showReturnDialog = false
+                            itemToReturn = null
+                        }
+                    ) {
+                        Text("Cancel")
+                    }
+                }
+            )
         }
     }
 }
 
 @Composable
-fun ClaimedItemCard(item: ClaimedItem) {
+fun ClaimedItemCard(
+    item: ClaimedItem,
+    onReturnClick: (ClaimedItem) -> Unit
+) {
 
     Card(
         modifier = Modifier
@@ -143,6 +254,14 @@ fun ClaimedItemCard(item: ClaimedItem) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(text = "Claimed by: ${item.claimerEmail}")
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Button(
+                onClick = {onReturnClick(item)}
+            ) {
+                Text("Return")
+            }
         }
     }
 }

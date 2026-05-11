@@ -13,9 +13,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -77,6 +81,13 @@ fun MyClaimedItems(navController : NavHostController){
         var myClaimedItems by remember {
             mutableStateOf<List<ClaimedItem>>(emptyList())
         }
+        var showDeleteDialog by remember {
+            mutableStateOf(false)
+        }
+
+        var itemToDelete by remember {
+            mutableStateOf<ClaimedItem?>(null)
+        }
 
         LaunchedEffect(Unit) {
 
@@ -109,14 +120,79 @@ fun MyClaimedItems(navController : NavHostController){
         ) {
 
             items(myClaimedItems) { item ->
-                MyClaimedItemCard(item)
+                MyClaimedItemCard(
+                    item=item,
+                    onDeleteClick = { selectedItem ->
+                        itemToDelete = selectedItem
+                        showDeleteDialog = true
+                    }
+                )
             }
+        }
+        if (showDeleteDialog && itemToDelete != null) {
+
+            AlertDialog(
+
+                onDismissRequest = {
+                    showDeleteDialog = false
+                    itemToDelete = null
+                },
+
+                title = {
+                    Text("Confirm Delete")
+                },
+
+                text = {
+                    Text("Are you sure you want to delete this claim?")
+                },
+
+                confirmButton = {
+
+                    Button(
+                        onClick = {
+
+                            FirebaseFirestore.getInstance()
+                                .collection("claimed_items")
+                                .document(itemToDelete!!.id)
+                                .delete()
+                                .addOnSuccessListener {
+
+                                    myClaimedItems =
+                                        myClaimedItems.filter {
+
+                                            it.id != itemToDelete!!.id
+                                        }
+
+                                    showDeleteDialog = false
+                                    itemToDelete = null
+                                }
+                        }
+                    ) {
+                        Text("Delete")
+                    }
+                },
+
+                dismissButton = {
+
+                    OutlinedButton(
+                        onClick = {
+                            showDeleteDialog = false
+                            itemToDelete = null
+                        }
+                    ) {
+                        Text("Cancel")
+                    }
+                }
+            )
         }
     }
 }
 
 @Composable
-fun MyClaimedItemCard(item: ClaimedItem) {
+fun MyClaimedItemCard(
+    item: ClaimedItem,
+    onDeleteClick: (ClaimedItem) -> Unit
+) {
 
     Card(
         modifier = Modifier
@@ -169,6 +245,16 @@ fun MyClaimedItemCard(item: ClaimedItem) {
             Text(
                 text = "Original finder: ${item.originalOwnerEmail}"
             )
+
+            Button(
+                onClick = {onDeleteClick(item)},
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Red,
+                    contentColor = Color.White
+                )
+                ) {
+                Text("Delete claim")
+            }
         }
     }
 }
