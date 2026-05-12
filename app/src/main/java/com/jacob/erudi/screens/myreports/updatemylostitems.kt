@@ -1,46 +1,33 @@
 package com.jacob.erudi.screens.myreports
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jacob.erudi.data.ItemViewModel
+import com.jacob.erudi.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,235 +35,173 @@ fun EditLostItemScreen(
     navController: NavController,
     itemId: String
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Default.Search,
-                            contentDescription = "search icon",
-                            modifier = Modifier.size(24.dp)
-                        )
+    val viewModel: ItemViewModel = viewModel()
+    val db = FirebaseFirestore.getInstance()
 
-                        Spacer(modifier = Modifier.width(8.dp))
+    var itemName by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var location by remember { mutableStateOf("") }
+    var dateLost by remember { mutableStateOf("") }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var currentImageUrl by remember { mutableStateOf("") }
+    var isSaving by remember { mutableStateOf(false) }
 
-                        Text(
-                            text = "UPDATE LOST ITEM"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Blue,
-                    titleContentColor = Color.White
-                ),
-            )
-        }
-    ) {
-        innerpadding->
-        val viewModel: ItemViewModel = viewModel()
-        val db = FirebaseFirestore.getInstance()
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? -> imageUri = uri }
 
-        var itemName by remember { mutableStateOf("") }
-        var category by remember { mutableStateOf("") }
-        var description by remember { mutableStateOf("") }
-        var location by remember { mutableStateOf("") }
-        var dateLost by remember { mutableStateOf("") }
-        var imageUri by remember { mutableStateOf<Uri?>(null) }
-        var currentImageUrl by remember { mutableStateOf("") }
-
-        val launcher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.GetContent()
-        ) { uri: Uri? ->
-
-            imageUri = uri
-        }
-
-        // FETCH CURRENT ITEM DATA
-        LaunchedEffect(Unit) {
-
-            db.collection("lost_items")
-                .document(itemId)
-                .get()
-                .addOnSuccessListener { document ->
-
-                    if (document.exists()) {
-
-                        itemName = document.getString("itemName") ?: ""
-
-                        category = document.getString("category") ?: ""
-
-                        description = document.getString("description") ?: ""
-
-                        location = document.getString("location") ?: ""
-
-                        dateLost = document.getString("dateLost") ?: ""
-
-                        currentImageUrl = document.getString("imageUrl") ?: ""
-                    }
-                }
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .padding(innerpadding)
-                .verticalScroll(rememberScrollState())
-        ) {
-
-            OutlinedTextField(
-                value = itemName,
-                onValueChange = {
-                    itemName = it
-                },
-                label = {
-                    Text("Item Name")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedTextField(
-                value = category,
-                onValueChange = {
-                    category = it
-                },
-                label = {
-                    Text("Category")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedTextField(
-                value = description,
-                onValueChange = {
-                    description = it
-                },
-                label = {
-                    Text("Description")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedTextField(
-                value = location,
-                onValueChange = {
-                    location = it
-                },
-                label = {
-                    Text("Location")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedTextField(
-                value = dateLost,
-                onValueChange = {
-                    dateLost = it
-                },
-                label = {
-                    Text("Date Lost")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-
-            AsyncImage(
-                model = imageUri ?: currentImageUrl,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                contentScale = ContentScale.Crop
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // CHANGE IMAGE BUTTON
-            Button(
-                onClick = {
-                    launcher.launch("image/*")
-                }
-            ) {
-                Text("Change Image")
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(
-                onClick = {
-                    // CASE 1: No new image selected → keep existing image
-                    if (imageUri == null) {
-
-                        db.collection("lost_items")
-                            .document(itemId)
-                            .update(
-                                mapOf(
-                                    "itemName" to itemName,
-                                    "category" to category,
-                                    "description" to description,
-                                    "location" to location,
-                                    "dateLost" to dateLost,
-                                    "imageUrl" to currentImageUrl
-                                )
-                            )
-                            .addOnSuccessListener {
-                                navController.popBackStack()
-                            }
-                            .addOnFailureListener { e ->
-                                Log.e("FirestoreUpdate", e.message.toString())
-                            }
-
-                    } else {
-
-                        // CASE 2: New image selected → upload to Cloudinary first
-                        viewModel.uploadImageToCloudinary(
-                            context = navController.context,
-                            imageUri = imageUri!!,
-
-                            onSuccess = { newImageUrl ->
-
-                                db.collection("lost_items")
-                                    .document(itemId)
-                                    .update(
-                                        mapOf(
-                                            "itemName" to itemName,
-                                            "category" to category,
-                                            "description" to description,
-                                            "location" to location,
-                                            "dateLost" to dateLost,
-                                            "imageUrl" to newImageUrl
-                                        )
-                                    )
-                                    .addOnSuccessListener {
-                                        navController.popBackStack()
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.e("FirestoreUpdate", e.message.toString())
-                                    }
-                            },
-
-                            onError = { errorMessage ->
-                                Log.e("CloudinaryUpload", errorMessage)
-                            }
-                        )
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-
-                Text("Update Item")
+    // FETCH CURRENT DATA
+    LaunchedEffect(Unit) {
+        db.collection("lost_items").document(itemId).get().addOnSuccessListener { document ->
+            if (document.exists()) {
+                itemName = document.getString("itemName") ?: ""
+                category = document.getString("category") ?: ""
+                description = document.getString("description") ?: ""
+                location = document.getString("location") ?: ""
+                dateLost = document.getString("dateLost") ?: ""
+                currentImageUrl = document.getString("imageUrl") ?: ""
             }
         }
     }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Update Lost Report", fontWeight = FontWeight.Bold) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = FormIndigo,
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.White
+                )
+            )
+        },
+        containerColor = FormBackground
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Hero Image Card
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color.LightGray.copy(alpha = 0.2f))
+            ) {
+                AsyncImage(
+                    model = imageUri ?: currentImageUrl,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+                
+                // Overlay Button for Image change
+                Surface(
+                    onClick = { launcher.launch("image/*") },
+                    modifier = Modifier.align(Alignment.BottomEnd).padding(12.dp),
+                    color = FormIndigo,
+                    shape = RoundedCornerShape(12.dp),
+                    shadowElevation = 6.dp
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Default.AddPhotoAlternate, contentDescription = null, tint = Color.White, modifier = Modifier.size(18.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Update Photo", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Form Inputs
+            LostEditField(value = itemName, onValueChange = { itemName = it }, label = "Item Name", icon = Icons.Default.Label)
+            LostEditField(value = category, onValueChange = { category = it }, label = "Category", icon = Icons.Default.Category)
+            LostEditField(value = location, onValueChange = { location = it }, label = "Location Lost", icon = Icons.Default.MyLocation)
+            LostEditField(value = dateLost, onValueChange = { dateLost = it }, label = "Date Lost", icon = Icons.Default.CalendarToday)
+            LostEditField(value = description, onValueChange = { description = it }, label = "Description", icon = Icons.Default.Notes, singleLine = false)
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Final Action
+            Button(
+                onClick = {
+                    isSaving = true
+                    val updateMap = mutableMapOf<String, Any>(
+                        "itemName" to itemName,
+                        "category" to category,
+                        "description" to description,
+                        "location" to location,
+                        "dateLost" to dateLost
+                    )
+
+                    if (imageUri == null) {
+                        db.collection("lost_items").document(itemId).update(updateMap)
+                            .addOnSuccessListener { navController.popBackStack() }
+                            .addOnFailureListener { isSaving = false }
+                    } else {
+                        viewModel.uploadImageToCloudinary(
+                            context = navController.context,
+                            imageUri = imageUri!!,
+                            onSuccess = { url ->
+                                updateMap["imageUrl"] = url
+                                db.collection("lost_items").document(itemId).update(updateMap)
+                                    .addOnSuccessListener { navController.popBackStack() }
+                            },
+                            onError = { isSaving = false }
+                        )
+                    }
+                },
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = FormIndigo),
+                enabled = !isSaving
+            ) {
+                if (isSaving) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color.White, strokeWidth = 2.dp)
+                } else {
+                    Text("Update Report", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(20.dp))
+        }
+    }
+}
+
+@Composable
+fun LostEditField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    icon: ImageVector,
+    singleLine: Boolean = true
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        leadingIcon = { Icon(icon, contentDescription = null, tint = FormIndigo, modifier = Modifier.size(20.dp)) },
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        shape = RoundedCornerShape(12.dp),
+        singleLine = singleLine,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = FormIndigo,
+            focusedLabelColor = FormIndigo,
+            cursorColor = FormIndigo
+        )
+    )
 }

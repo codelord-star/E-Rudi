@@ -1,6 +1,7 @@
 package com.jacob.erudi.screens.report
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -32,11 +33,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.jacob.erudi.data.ItemViewModel
+import com.jacob.erudi.navigation.ROUTE_FOUNDITEMS
+import com.jacob.erudi.navigation.ROUTE_MYFOUNDITEMS
+import com.jacob.erudi.ui.theme.*
 
 // Consistent Theme Palette
-val AppDeepBlue = Color(0xFF1A237E)
-val AppSurface = Color(0xFFF8F9FA)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportFoundItem(navController: NavHostController) {
@@ -214,7 +215,35 @@ fun ReportFoundItem(navController: NavHostController) {
             // Submit Button
             Button(
                 onClick = {
-                    viewModel.uploadFoundItem(itemName, category, description, foundLocation, dateFound, selectedImageUri, context)
+                    viewModel.uploadFoundItem(
+                        itemName = itemName,
+                        category = category,
+                        description = description,
+                        foundLocation = foundLocation,
+                        dateFound = dateFound,
+                        imageUri = selectedImageUri,
+                        context = context,
+
+                        onSuccess = {
+
+                            Toast.makeText(
+                                context,
+                                "Report submitted successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            navController.navigate(ROUTE_MYFOUNDITEMS)
+                        },
+
+                        onError = { error ->
+
+                            Toast.makeText(
+                                context,
+                                error,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    )
                 },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape = RoundedCornerShape(16.dp),

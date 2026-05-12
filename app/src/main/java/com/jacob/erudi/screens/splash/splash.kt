@@ -23,14 +23,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.jacob.erudi.R
-import com.jacob.erudi.navigation.ROUTE_HOME
 import kotlinx.coroutines.delay
 
 @Composable
 fun Splash(navController: NavHostController){
     LaunchedEffect(true) {
         delay(2000)
-        navController.navigate(ROUTE_HOME)
+        navController.navigate("home")
     }
     Box(
         modifier = Modifier

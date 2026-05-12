@@ -27,7 +27,7 @@ import com.jacob.erudi.screens.splash.Splash
 @Composable
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),
-    startDestination: String=ROUTE_HOME
+    startDestination: String="home"
 ){
     NavHost(navController=navController,
         startDestination=startDestination
@@ -35,7 +35,7 @@ fun AppNavHost(
         composable ("splash"){
             Splash(navController)
         }
-        composable (ROUTE_HOME){
+        composable ("home"){
             Home(navController)
         }
         composable (ROUTE_REGISTER){

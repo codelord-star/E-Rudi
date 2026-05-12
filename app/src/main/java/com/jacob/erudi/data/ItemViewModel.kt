@@ -11,8 +11,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.jacob.erudi.models.FoundItem
-import com.jacob.erudi.navigation.ROUTE_FOUNDITEMS
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -36,7 +34,9 @@ class ItemViewModel : ViewModel() {
         location: String,
         dateLost: String,
         imageUri: Uri?,
-        context: Context
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
     ) {
 
         Log.d("VM", "uploadLostItem called")
@@ -63,7 +63,7 @@ class ItemViewModel : ViewModel() {
         // -----------------------------
         // 2. Get user profile (name + phone)
         // -----------------------------
-        val database = FirebaseDatabase.getInstance().reference
+        //val database = FirebaseDatabase.getInstance().reference
                 // -----------------------------
                 // 3. Upload image to Cloudinary
                 // -----------------------------
@@ -95,14 +95,17 @@ class ItemViewModel : ViewModel() {
                             .add(lostItem)
                             .addOnSuccessListener {
                                 Log.d("FIRESTORE", "Item uploaded successfully")
+                                onSuccess()
                             }
                             .addOnFailureListener {
                                 Log.e("FIRESTORE", it.message.toString())
+                                onError(it.message ?: "Failed to upload item")
                             }
 
                     },
                     onError = {
                         Log.e("CLOUDINARY", it)
+                        onError(it)
                     }
                 )
     }
@@ -179,7 +182,9 @@ class ItemViewModel : ViewModel() {
         foundLocation: String,
         dateFound: String,
         imageUri: Uri?,
-        context: Context
+        context: Context,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
     ) {
 
         Log.d("VM", "uploadFoundItem called")
@@ -238,15 +243,18 @@ class ItemViewModel : ViewModel() {
 
                     .addOnSuccessListener {
                         Log.d("FIRESTORE", "Found item uploaded successfully")
+                        onSuccess()
                     }
 
                     .addOnFailureListener {
                         Log.e("FIRESTORE", it.message.toString())
+                        onError(it.message ?: "Failed to upload found item")
                     }
             },
 
             onError = {
                 Log.e("CLOUDINARY", it)
+                onError(it)
             }
         )
     }

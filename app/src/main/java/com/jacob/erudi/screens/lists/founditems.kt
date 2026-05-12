@@ -1,38 +1,21 @@
 package com.jacob.erudi.screens.lists
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,156 +28,187 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jacob.erudi.models.FoundItem
 import com.jacob.erudi.navigation.ROUTE_MYCLAIMS
-import kotlin.jvm.java
+import com.jacob.erudi.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FoundItemsList(navController: NavHostController){
+fun FoundItemsList(navController: NavHostController) {
+    val db = FirebaseFirestore.getInstance()
+    var foundItems by remember { mutableStateOf<List<FoundItem>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) {
+        db.collection("found_items")
+            .get()
+            .addOnSuccessListener { result ->
+                foundItems = result.documents.mapNotNull { doc ->
+                    doc.toObject(FoundItem::class.java)?.copy(id = doc.id)
+                }
+                isLoading = false
+            }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Default.Search,
-                            contentDescription = "search icon",
-                            modifier = Modifier.size(24.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        Text("LIST OF FOUND ITEMS")
+                title = { Text("Found Items Catalog", fontWeight = FontWeight.Bold) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Blue,
-                    titleContentColor = Color.White
-                ),
-            )
-        }
-    ) {
-        innerpadding->
-        val db = FirebaseFirestore.getInstance()
-        var foundItems by remember {
-            mutableStateOf<List<FoundItem>>(emptyList())
-        }
-
-        LaunchedEffect(Unit) {
-            db.collection("found_items")
-                .get()
-                .addOnSuccessListener { result ->
-                    val items = result.documents.mapNotNull { document ->
-                        val item = document.toObject(FoundItem::class.java)
-
-                        item?.copy(id = document.id)
-                    }
-                    foundItems = items
-                }
-        }
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerpadding)
-                .padding(16.dp)
-        ) {
-            items(foundItems) { item ->
-                FoundItemCard(
-                    item=item,
-                    onClaimClick = { selectedItem ->
-
-                        val currentUser =
-                            FirebaseAuth.getInstance().currentUser
-
-                        val claimerEmail = currentUser?.email ?: ""
-
-                        val claimedItem = hashMapOf(
-
-                            "itemName" to selectedItem.itemName,
-                            "category" to selectedItem.category,
-                            "description" to selectedItem.description,
-                            "locationFound" to selectedItem.foundLocation,
-                            "dateFound" to selectedItem.dateFound,
-                            "imageUrl" to selectedItem.imageUrl,
-
-                            // original finder
-                            "originalOwnerEmail" to selectedItem.email,
-
-                            // person claiming
-                            "claimerEmail" to claimerEmail
-                        )
-
-                        FirebaseFirestore.getInstance()
-                            .collection("claimed_items")
-                            .add(claimedItem)
-                            .addOnSuccessListener {
-
-                                Toast.makeText(
-                                    navController.context,
-                                    "Claim has been made",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-
-                                navController.navigate(
-                                    ROUTE_MYCLAIMS
-                                )
-                            }
-                    }
+                    containerColor = AppDeepBlue,
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.White
                 )
+            )
+        },
+        containerColor = BackgroundGray
+    ) { innerPadding ->
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = AppDeepBlue)
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentPadding = PaddingValues(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(foundItems) { item ->
+                    FoundItemCard(
+                        item = item,
+                        onClaimClick = { selectedItem ->
+                            val currentUser = FirebaseAuth.getInstance().currentUser
+                            val claimerEmail = currentUser?.email ?: ""
+
+                            val claimedItem = hashMapOf(
+                                "itemName" to selectedItem.itemName,
+                                "category" to selectedItem.category,
+                                "description" to selectedItem.description,
+                                "locationFound" to selectedItem.foundLocation,
+                                "dateFound" to selectedItem.dateFound,
+                                "imageUrl" to selectedItem.imageUrl,
+                                "originalOwnerEmail" to selectedItem.email,
+                                "claimerEmail" to claimerEmail
+                            )
+
+                            FirebaseFirestore.getInstance()
+                                .collection("claimed_items")
+                                .add(claimedItem)
+                                .addOnSuccessListener {
+                                    Toast.makeText(navController.context, "Claim Submitted", Toast.LENGTH_SHORT).show()
+                                    navController.navigate(ROUTE_MYCLAIMS)
+                                }
+                        }
+                    )
+                }
             }
         }
     }
 }
+
 @Composable
-fun FoundItemCard(
-    item: FoundItem,
-    onClaimClick: (FoundItem) -> Unit
-    ) {
-
+fun FoundItemCard(item: FoundItem, onClaimClick: (FoundItem) -> Unit) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-
+        Column {
+            // Image Section
             if (item.imageUrl.isNotEmpty()) {
-
                 AsyncImage(
-                    model = item.imageUrl, // Cloudinary URL
-                    contentDescription = "Found item image",
+                    model = item.imageUrl,
+                    contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp),
+                        .height(180.dp)
+                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
                     contentScale = ContentScale.Crop
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
             }
 
-            Text(text = "Item name: ${item.itemName}")
-            Text(text = "Category: ${item.category}")
-            Text(text = "Found at: ${item.foundLocation}")
-            Text(text = "Date: ${item.dateFound}")
-            Text(text = "Description: ${item.description}")
-            Text(text = "Contact: ${item.email}")
+            // Content Section
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = item.itemName,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                    Badge(containerColor = AppDeepBlue.copy(alpha = 0.1f)) {
+                        Text(item.category, color = AppDeepBlue, modifier = Modifier.padding(4.dp))
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Detail Rows
+                ItemInfoRow(Icons.Default.LocationOn, "Location", item.foundLocation)
+                ItemInfoRow(Icons.Default.DateRange, "Date Found", item.dateFound)
+                
+                Text(
+                    text = item.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.DarkGray,
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    maxLines = 2
+                )
+
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), thickness = 0.5.dp)
+
+                // Footer Section
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Text("Reported by:", style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+                        Text(item.email, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                    }
+                    
+                    Button(
+                        onClick = { onClaimClick(item) },
+                        colors = ButtonDefaults.buttonColors(containerColor = SuccessGreen),
+                        shape = RoundedCornerShape(8.dp),
+                        contentPadding = PaddingValues(horizontal = 24.dp)
+                    ) {
+                        Icon(Icons.Default.CheckCircle, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Claim")
+                    }
+                }
+            }
         }
-        Button(onClick = {onClaimClick(item)},
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Green,
-                contentColor = Color.White
-            )) {
-            Text("Claim")
-        }
+    }
+}
+
+@Composable
+fun ItemInfoRow(icon: ImageVector, label: String, value: String) {
+    Row(
+        modifier = Modifier.padding(vertical = 2.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(icon, contentDescription = null, modifier = Modifier.size(16.dp), tint = Color.Gray)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = "$label: ", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
+        Text(text = value, style = MaterialTheme.typography.bodySmall, color = Color.DarkGray)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun FoundItemsPreview(){
+fun FoundItemsPreview() {
     FoundItemsList(rememberNavController())
 }
